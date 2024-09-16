@@ -1,0 +1,38 @@
+#ifndef SPRITE_H
+#define SPRITE_H
+
+#include "holder.h"
+#include "atlas/xmlatlas.h"
+
+typedef struct sprite {
+    float scaleX, scaleY;
+    VkViewport viewport;
+    VkRect2D scissor;
+    VkImage image;
+    VkDeviceMemory imageMemory;
+    VkImageView imageView;
+    VkSampler sampler;
+    VkDescriptorPool descriptorPool;
+    VkDescriptorSet descriptorSet;
+
+    uint8_t isAnimated;
+
+    // animated stuff
+    VkBuffer texcoordBuffer;
+    VkDeviceMemory texcoordBufferMemory;
+    sparrowAtlas atlas;
+    float delay;
+    float accumulator;
+    uint32_t animFrame;
+    uint32_t framesOffset;
+    uint32_t animIndex;
+} sprite;
+
+void staticSpriteCreate(char* imgPath, float x, float y, sprite* pSprite);
+void staticSpriteDestroy(sprite* pSprite);
+void animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, sprite* pSprite);
+void animatedSpriteDestroy(sprite* pSprite);
+void spritePlayAnimation(const char* name, sprite* pSprite);
+void spriteSetFps(float fps, sprite* pSprite);
+
+#endif
