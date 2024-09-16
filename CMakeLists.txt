@@ -4,7 +4,7 @@ project(FNF-vulkan-engine LANGUAGES C VERSION 1.0)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-option(VALIDATION "enabled validation layer" ON)
+option(VALIDATION "enable validation layer" ON)
 option(VK_NO_PROTOTYPES "enable VK_NO_PROTOTYPES (currently not supported)" OFF)
 
 if(VALIDATION)
