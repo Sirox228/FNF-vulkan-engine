@@ -47,7 +47,7 @@ set(SOURCES
 )
 
 find_package(SDL2 REQUIRED)
-find_package(VulkanHeaders REQUIRED)
+find_package(Vulkan REQUIRED)
 find_package(cglm REQUIRED)
 find_package(EXPAT REQUIRED)
 
@@ -57,8 +57,7 @@ if(UNIX)
     target_link_libraries(FNF-vulkan-engine m)
 endif()
 if(NOT VK_NO_PROTOTYPES)
-    find_library(vklib NAMES vulkan vulkan-1)
-    target_link_libraries(FNF-vulkan-engine ${vklib})
+    target_link_libraries(FNF-vulkan-engine Vulkan::Vulkan)
 endif()
 target_include_directories(FNF-vulkan-engine PUBLIC src)
 target_include_directories(FNF-vulkan-engine PUBLIC external)
