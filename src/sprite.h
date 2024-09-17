@@ -34,9 +34,9 @@ typedef struct sprite {
     uint32_t animIndex;
 } sprite;
 
-void staticSpriteCreate(char* imgPath, float x, float y, sprite* pSprite);
+sprite staticSpriteCreate(char* imgPath, float x, float y);
 void staticSpriteDestroy(sprite* pSprite);
-void animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, sprite* pSprite);
+sprite animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, float fps);
 void animatedSpriteDestroy(sprite* pSprite);
 void spritePlayAnimation(const char* name, sprite* pSprite);
 animationHash spriteAnimationHash(const char* name, sprite* pSprite);
