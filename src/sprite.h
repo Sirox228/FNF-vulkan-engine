@@ -4,6 +4,12 @@
 #include "holder.h"
 #include "atlas/xmlatlas.h"
 
+typedef struct animationHash {
+    uint32_t framesOffset;
+    uint32_t animIndex;
+    uint32_t nameHash;
+} animationHash;
+
 typedef struct sprite {
     float scaleX, scaleY;
     VkViewport viewport;
@@ -33,6 +39,8 @@ void staticSpriteDestroy(sprite* pSprite);
 void animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, sprite* pSprite);
 void animatedSpriteDestroy(sprite* pSprite);
 void spritePlayAnimation(const char* name, sprite* pSprite);
+animationHash spriteAnimationHash(const char* name, sprite* pSprite);
+void spritePlayAnimationFromHash(animationHash hashStruct, sprite* pSprite);
 void spriteSetFps(float fps, sprite* pSprite);
 
 #endif

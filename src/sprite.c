@@ -155,6 +155,26 @@ void spritePlayAnimation(const char* name, sprite* pSprite) {
     }
 }
 
+animationHash spriteAnimationHash(const char* name, sprite* pSprite) {
+    animationHash hash;
+    hash.nameHash = stringHash(name, strlen(name));
+    uint32_t offset = 0;
+    for (uint32_t i = 0; i < pSprite->atlas.acount; i++) {
+        if (pSprite->atlas.animations[i].nameHash == hash.nameHash) {
+            hash.animIndex = i;
+            hash.framesOffset = offset;
+            break;
+        }
+        offset += pSprite->atlas.animations[i].fcount;
+    }
+    return hash;
+}
+
+void spritePlayAnimationFromHash(animationHash hashStruct, sprite* pSprite) {
+    pSprite->animIndex = hashStruct.animIndex;
+    pSprite->framesOffset = hashStruct.framesOffset;
+}
+
 void spriteSetFps(float fps, sprite* pSprite) {
     pSprite->delay = 1000.0f / fps;
 }
