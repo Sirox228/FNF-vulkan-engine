@@ -78,8 +78,8 @@ int main() {
         viewportStateInfo.pViewports = NULL;
         viewportStateInfo.pScissors = NULL;
 
-        createGraphicsPipeline(&staticSpritePipeline, staticSpritePipelineLayout, renderPass, "assets/shaders/quad/quad.vert.spv", "assets/shaders/quad/quad.frag.spv", &defaultVertexInputStateInfo, &defaultInputAssemblyStateInfo, &defaultDepthStencilStateInfo, &viewportStateInfo, &defaultRasterizationStateInfo, &defaultMultisampleStateInfo, &defaultBlendStateInfo, &dynamicStateInfo);
-        createGraphicsPipeline(&animatedSpritePipeline, animatedSpritePipelineLayout, renderPass, "assets/shaders/animated/animated.vert.spv", "assets/shaders/animated/animated.frag.spv", &defaultVertexInputStateInfo, &defaultInputAssemblyStateInfo, &defaultDepthStencilStateInfo, &viewportStateInfo, &defaultRasterizationStateInfo, &defaultMultisampleStateInfo, &defaultBlendStateInfo, &dynamicStateInfo);
+        createGraphicsPipeline(&staticSpritePipeline, staticSpritePipelineLayout, renderPass, 0, "assets/shaders/quad/quad.vert.spv", "assets/shaders/quad/quad.frag.spv", NULL, NULL, &defaultVertexInputStateInfo, &defaultInputAssemblyStateInfo, NULL, &defaultDepthStencilStateInfo, &viewportStateInfo, &defaultRasterizationStateInfo, &defaultMultisampleStateInfo, &defaultBlendStateInfo, &dynamicStateInfo);
+        createGraphicsPipeline(&animatedSpritePipeline, animatedSpritePipelineLayout, renderPass, 0, "assets/shaders/animated/animated.vert.spv", "assets/shaders/animated/animated.frag.spv", NULL, NULL, &defaultVertexInputStateInfo, &defaultInputAssemblyStateInfo, NULL, &defaultDepthStencilStateInfo, &viewportStateInfo, &defaultRasterizationStateInfo, &defaultMultisampleStateInfo, &defaultBlendStateInfo, &dynamicStateInfo);
     }
 
     createCommandPool(&mainCommandPool, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);

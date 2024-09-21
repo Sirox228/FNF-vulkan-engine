@@ -4,6 +4,7 @@
 #include "util.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <vulkan/vulkan_core.h>
 
 void createPipelineLayout(VkPipelineLayout* pPipelineLayout, VkDescriptorSetLayout* pSetLayouts, uint32_t setLayoutCount, VkPushConstantRange* pPushConstantRanges, uint32_t pushConstantRangeCount) {
     VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
@@ -35,6 +36,16 @@ void fillDefaultStates() {
     defaultCompStageInfo.module = NULL;
     defaultCompStageInfo.pName = "main";
 
+    defaultTescStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    defaultTescStageInfo.stage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+    defaultTescStageInfo.module = NULL;
+    defaultTescStageInfo.pName = "main";
+
+    defaultTeseStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    defaultTeseStageInfo.stage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+    defaultTeseStageInfo.module = NULL;
+    defaultTeseStageInfo.pName = "main";
+
     defaultVertInpBindDesc.binding = 0;
     defaultVertInpBindDesc.stride = sizeof(vertex);
     defaultVertInpBindDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
@@ -53,6 +64,12 @@ void fillDefaultStates() {
     defaultInputAssemblyStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     defaultInputAssemblyStateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     defaultInputAssemblyStateInfo.primitiveRestartEnable = VK_FALSE;
+
+    defaultTessellationInputAssemblyStateInfo = defaultInputAssemblyStateInfo;
+    defaultTessellationInputAssemblyStateInfo.topology = VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
+
+    defaultTessellationStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO;
+    defaultTessellationStateInfo.patchControlPoints = 3;
 
     defaultDepthStencilStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     defaultDepthStencilStateInfo.depthTestEnable = VK_FALSE;
@@ -118,31 +135,44 @@ void fillDefaultStates() {
     defaultBlendStateInfo.blendConstants[3] = 0.0f;
 }
 
-void createGraphicsPipeline(VkPipeline* pPipeline, VkPipelineLayout sourceLayout, VkRenderPass sourceRenderPass, char* vertPath, char* fragPath, VkPipelineVertexInputStateCreateInfo* vertexInputStateInfo, VkPipelineInputAssemblyStateCreateInfo* inputAssemblyStateInfo, VkPipelineDepthStencilStateCreateInfo* depthStencilStateInfo, VkPipelineViewportStateCreateInfo* viewportStateInfo, VkPipelineRasterizationStateCreateInfo* rasterizationStateInfo, VkPipelineMultisampleStateCreateInfo* multisampleStateInfo, VkPipelineColorBlendStateCreateInfo* blendStateInfo, VkPipelineDynamicStateCreateInfo* dynamicStateInfo) {
-    uint32_t vertSize, fragSize;
-    char* vertCode = getFileContent(vertPath, &vertSize);
-    char* fragCode = getFileContent(fragPath, &fragSize);
+void createGraphicsPipeline(VkPipeline* pPipeline, VkPipelineLayout sourceLayout, VkRenderPass sourceRenderPass, uint32_t subpass, char* vertPath, char* fragPath, char* tescPath, char* tesePath, VkPipelineVertexInputStateCreateInfo* vertexInputStateInfo, VkPipelineInputAssemblyStateCreateInfo* inputAssemblyStateInfo, VkPipelineTessellationStateCreateInfo* tessellationStateInfo, VkPipelineDepthStencilStateCreateInfo* depthStencilStateInfo, VkPipelineViewportStateCreateInfo* viewportStateInfo, VkPipelineRasterizationStateCreateInfo* rasterizationStateInfo, VkPipelineMultisampleStateCreateInfo* multisampleStateInfo, VkPipelineColorBlendStateCreateInfo* blendStateInfo, VkPipelineDynamicStateCreateInfo* dynamicStateInfo) {
+    uint32_t vertSize, fragSize, tescSize, teseSize;
+    char* vertCode, *fragCode, *tescCode, *teseCode;
+    vertCode = getFileContent(vertPath, &vertSize);
+    fragCode = getFileContent(fragPath, &fragSize);
 
-    VkShaderModule vert, frag;
+    VkShaderModule vert, frag, tesc = NULL, tese = NULL;
     createShaderModule(&vert, vertCode, vertSize);
     createShaderModule(&frag, fragCode, fragSize);
+
+    uint32_t stageCount = 2;
+
+    VkPipelineShaderStageCreateInfo stages[4] = {defaultVertStageInfo, defaultFragStageInfo, defaultTescStageInfo, defaultTeseStageInfo};
+    stages[0].module = vert;
+    stages[1].module = frag;
 
     free(vertCode);
     free(fragCode);
 
-    VkPipelineShaderStageCreateInfo fragStageInfo = defaultFragStageInfo;
-    VkPipelineShaderStageCreateInfo vertStageInfo = defaultVertStageInfo;
-    fragStageInfo.module = frag;
-    vertStageInfo.module = vert;
-
-    VkPipelineShaderStageCreateInfo stages[] = {vertStageInfo, fragStageInfo};
+    if (tescPath != NULL && tesePath != NULL && tessellationStateInfo != NULL) {
+        tescCode = getFileContent(tescPath, &tescSize);
+        teseCode = getFileContent(tesePath, &teseSize);
+        createShaderModule(&tesc, tescCode, tescSize);
+        createShaderModule(&tese, teseCode, teseSize);
+        stageCount += 2;
+        stages[2].module = tesc;
+        stages[3].module = tese;
+        free(tescCode);
+        free(teseCode);
+    }
 
     VkGraphicsPipelineCreateInfo pipelineInfo = {};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.stageCount = 2;
+    pipelineInfo.stageCount = stageCount;
     pipelineInfo.pStages = stages;
     pipelineInfo.pVertexInputState = vertexInputStateInfo;
     pipelineInfo.pInputAssemblyState = inputAssemblyStateInfo;
+    pipelineInfo.pTessellationState = tessellationStateInfo;
     pipelineInfo.pViewportState = viewportStateInfo;
     pipelineInfo.pRasterizationState = rasterizationStateInfo;
     pipelineInfo.pMultisampleState = multisampleStateInfo;
@@ -151,7 +181,7 @@ void createGraphicsPipeline(VkPipeline* pPipeline, VkPipelineLayout sourceLayout
     pipelineInfo.pDynamicState = dynamicStateInfo;
     pipelineInfo.layout = sourceLayout;
     pipelineInfo.renderPass = sourceRenderPass;
-    pipelineInfo.subpass = 0;
+    pipelineInfo.subpass = subpass;
     pipelineInfo.basePipelineHandle = NULL;
 
     if (vkCreateGraphicsPipelines(device, NULL, 1, &pipelineInfo, NULL, pPipeline) != VK_SUCCESS) {
@@ -161,6 +191,10 @@ void createGraphicsPipeline(VkPipeline* pPipeline, VkPipelineLayout sourceLayout
 
     vkDestroyShaderModule(device, frag, NULL);
     vkDestroyShaderModule(device, vert, NULL);
+    if (tesc != NULL && tese != NULL) {
+        vkDestroyShaderModule(device, tese, NULL);
+        vkDestroyShaderModule(device, tesc, NULL);
+    }
 }
 
 void createComputePipeline(VkPipeline* pPipeline, VkPipelineLayout pipelineLayout, char* compPath) {

@@ -49,10 +49,15 @@ extern uint32_t quadIndexData[QUAD_IDX_NUM];
 extern VkPipelineShaderStageCreateInfo defaultCompStageInfo;
 extern VkPipelineShaderStageCreateInfo defaultFragStageInfo;
 extern VkPipelineShaderStageCreateInfo defaultVertStageInfo;
+extern VkPipelineShaderStageCreateInfo defaultTescStageInfo;
+extern VkPipelineShaderStageCreateInfo defaultTeseStageInfo;
 extern VkVertexInputBindingDescription defaultVertInpBindDesc;
 extern VkVertexInputAttributeDescription defaultVertInpAttrDesc;
 extern VkPipelineVertexInputStateCreateInfo defaultVertexInputStateInfo;
 extern VkPipelineInputAssemblyStateCreateInfo defaultInputAssemblyStateInfo;
+// (sirox) if you're using tessellation shaders, specify this input assembly state
+extern VkPipelineInputAssemblyStateCreateInfo defaultTessellationInputAssemblyStateInfo;
+extern VkPipelineTessellationStateCreateInfo defaultTessellationStateInfo;
 extern VkPipelineDepthStencilStateCreateInfo defaultDepthStencilStateInfo;
 extern VkViewport defaultViewport;
 extern VkRect2D defaultScissor;
