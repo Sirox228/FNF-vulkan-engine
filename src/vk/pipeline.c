@@ -182,8 +182,8 @@ void createGraphicsPipeline(VkPipelineLayout sourceLayout, VkRenderPass sourceRe
 
     if (frag != NULL) vkDestroyShaderModule(device, frag, NULL);
     if (vert != NULL) vkDestroyShaderModule(device, vert, NULL);
-    if (tesc != NULL) vkDestroyShaderModule(device, tese, NULL);
-    if (tese != NULL) vkDestroyShaderModule(device, tesc, NULL);
+    if (tesc != NULL) vkDestroyShaderModule(device, tesc, NULL);
+    if (tese != NULL) vkDestroyShaderModule(device, tese, NULL);
 }
 
 void createComputePipeline(VkPipelineLayout pipelineLayout, char* compPath, VkPipeline* pPipeline) {
