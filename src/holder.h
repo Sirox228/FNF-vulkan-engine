@@ -2,7 +2,7 @@
 #define HOLDER_H
 
 #include <SDL2/SDL.h>
-#include <vulkan/vulkan.h>
+#include "vk/vkFunctions.h"
 #include "vk/vertex.h"
 #include "config.h"
 

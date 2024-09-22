@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 option(VALIDATION "enable validation layer" ON)
-option(VK_NO_PROTOTYPES "enable VK_NO_PROTOTYPES (currently not supported)" OFF)
+option(VK_NO_PROTOTYPES "when enabled, vulkan functions will be loaded at runtime instead of linking with vulkan library at compile-time" OFF)
 
 if(VALIDATION)
     add_compile_definitions(VALIDATION)
@@ -26,6 +26,7 @@ set(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/atlas/xmlatlas.c
     
     #vulkan stuff
+    ${CMAKE_CURRENT_LIST_DIR}/src/vk/vkFunctions.c
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/instance.c
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/surface.c
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/vkutil.c

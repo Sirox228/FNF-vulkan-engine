@@ -27,10 +27,13 @@ int main() {
         exit(0);
     }
 
+    loadVulkanLoaderFunctions();
     createInstance(&instance);
+    loadVulkanInstanceFunctions(instance);
     createSurface(&surface);
     findPhysicalDevice(&physicalDevice, &surfaceFormat, &surfacePresentMode, &surfaceCapabilities);
     createDevice(&device, physicalDevice);
+    loadVulkanDeviceFunctions(device);
     vkGetDeviceQueue(device, queueFamilyIndex, 0, &graphicsQueue);
     createSwapchain(&swapchain, surface);
 
