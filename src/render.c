@@ -94,7 +94,7 @@ void render(VkFramebuffer* pSwapchainFramebuffers, sprite* sprites, uint32_t spr
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSems;
 
-    if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[frame]) != VK_SUCCESS) {
+    if (vkQueueSubmit(queue, 1, &submitInfo, inFlightFences[frame]) != VK_SUCCESS) {
         printf("failed to submit rendering\n");
         exit(0);
     }
@@ -107,6 +107,6 @@ void render(VkFramebuffer* pSwapchainFramebuffers, sprite* sprites, uint32_t spr
     presentInfo.pSwapchains = &swapchain;
     presentInfo.pImageIndices = &index;
 
-    vkQueuePresentKHR(graphicsQueue, &presentInfo);
+    vkQueuePresentKHR(queue, &presentInfo);
 }
 

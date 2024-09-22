@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void createCommandPool(VkCommandPool* pPool, VkCommandPoolCreateFlagBits flags) {
+void createCommandPool(VkCommandPoolCreateFlagBits flags, VkCommandPool* pPool) {
     VkCommandPoolCreateInfo cmdPoolInfo = {};
     cmdPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     cmdPoolInfo.flags = flags;

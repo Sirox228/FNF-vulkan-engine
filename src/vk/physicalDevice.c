@@ -4,7 +4,7 @@
 
 #define DEVICE_EXTS_COUNT 1
 
-void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice, VkSurfaceFormatKHR* pSurfaceFormat, VkPresentModeKHR* pSurfacePresentMode, VkSurfaceCapabilitiesKHR* pSurfaceCapabilities) {
+void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice) {
     const char* deviceExts[DEVICE_EXTS_COUNT] = {"VK_KHR_swapchain"};
 
     uint32_t deviceCount;
@@ -54,7 +54,7 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice, VkSurfaceFormatKHR* p
     		}
     	}
 
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(devices[i], surface, pSurfaceCapabilities);
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(devices[i], surface, &surfaceCapabilities);
 
     	uint32_t formatCount;
     	vkGetPhysicalDeviceSurfaceFormatsKHR(devices[i], surface, &formatCount, NULL);
@@ -64,12 +64,12 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice, VkSurfaceFormatKHR* p
         uint8_t foundFormat = 0;
         for (int j = 0; j < formatCount; j++) {
             if (surfaceFormats[j].format == VK_FORMAT_R8G8B8A8_SRGB && surfaceFormats[i].colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-    			*pSurfaceFormat = surfaceFormats[j];
+    			surfaceFormat = surfaceFormats[j];
                 foundFormat = 1;
     		}
     	}
     	if (!foundFormat && formatCount > 0) {
-            *pSurfaceFormat = surfaceFormats[0];
+            surfaceFormat = surfaceFormats[0];
         }
 
     	uint32_t presentModeCount;
@@ -80,15 +80,15 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice, VkSurfaceFormatKHR* p
         uint8_t foundPresentMode = 0;
         for (int j = 0; j < presentModeCount; j++) {
             if (surfacePresentModes[j] == VK_PRESENT_MODE_MAILBOX_KHR) {
-    			*pSurfacePresentMode = VK_PRESENT_MODE_MAILBOX_KHR;
+    			surfacePresentMode = VK_PRESENT_MODE_MAILBOX_KHR;
                 foundPresentMode = 1;
     		}
     	}
     	if (!foundPresentMode) {
-            *pSurfacePresentMode = VK_PRESENT_MODE_FIFO_KHR;
+            surfacePresentMode = VK_PRESENT_MODE_FIFO_KHR;
         }
 
-        vkGetPhysicalDeviceMemoryProperties(devices[i], &physicalDeviceMemProps);
+        vkGetPhysicalDeviceMemoryProperties(devices[i], &deviceMemProperties);
         vkGetPhysicalDeviceProperties(devices[i], &deviceProperties);
         vkGetPhysicalDeviceFeatures(devices[i], &deviceFeatures);
 
@@ -98,7 +98,7 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice, VkSurfaceFormatKHR* p
         }
     }
     
-    if (*pPhysicalDevice == VK_NULL_HANDLE) {
+    if (*pPhysicalDevice == NULL) {
         printf("failed to find suitable vulkan physical device\n");
         exit(0);
     }

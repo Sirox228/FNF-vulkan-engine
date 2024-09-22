@@ -42,9 +42,12 @@ set(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/sync.c
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/descriptor.c
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/sampler.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/vk/image.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/vk/imageView.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/vk/buffer.c
 
     #externals
-    ${CMAKE_CURRENT_LIST_DIR}/external/stbi/stb_image.c
+    ${CMAKE_CURRENT_LIST_DIR}/external/stbi/src/stb_image.c
 )
 
 find_package(SDL2 REQUIRED)
@@ -60,7 +63,7 @@ endif()
 if(NOT VK_NO_PROTOTYPES)
     target_link_libraries(FNF-vulkan-engine Vulkan::Vulkan)
 endif()
-target_include_directories(FNF-vulkan-engine PUBLIC src)
-target_include_directories(FNF-vulkan-engine PUBLIC external)
+target_include_directories(FNF-vulkan-engine PUBLIC include)
+target_include_directories(FNF-vulkan-engine PUBLIC external/stbi/include)
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

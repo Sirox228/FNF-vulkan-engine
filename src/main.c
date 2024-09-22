@@ -15,6 +15,8 @@
 #include "render.h"
 #include "vk/vkutil.h"
 #include "vk/descriptor.h"
+#include "vk/imageView.h"
+#include "vk/buffer.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -27,15 +29,26 @@ int main() {
         exit(0);
     }
 
+    // vulkan global data and dynamic functions loading (if VK_NO_PROTOTYPES is enabled)
+    //
     loadVulkanLoaderFunctions();
     createInstance(&instance);
-    loadVulkanInstanceFunctions(instance);
     createSurface(&surface);
-    findPhysicalDevice(&physicalDevice, &surfaceFormat, &surfacePresentMode, &surfaceCapabilities);
-    createDevice(&device, physicalDevice);
+    loadVulkanInstanceFunctions(instance);
+    findPhysicalDevice(&physicalDevice);
+    createDevice(physicalDevice, &device);
     loadVulkanDeviceFunctions(device);
-    vkGetDeviceQueue(device, queueFamilyIndex, 0, &graphicsQueue);
-    createSwapchain(&swapchain, surface);
+    vkGetDeviceQueue(device, queueFamilyIndex, 0, &queue);
+
+    // render passes
+    //
+    createRenderPass(&renderPass);
+
+    // swapchain data
+    //
+    createSwapchain(surface, &swapchain);
+    createCommandPool(VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT, &swapchainCommandPool);
+    createCommandBuffers(MAX_FRAMES_IN_FLIGHT, swapchainCommandPool, swapchainCommandBuffers);
 
     uint32_t swapchainImageCount;
     vkGetSwapchainImagesKHR(device, swapchain, &swapchainImageCount, NULL);
@@ -46,10 +59,25 @@ int main() {
     for (uint32_t i = 0; i < swapchainImageCount; i++)
         createImageView(swapchainImages[i], surfaceFormat.format, VK_IMAGE_VIEW_TYPE_2D, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT, &swapchainImageViews[i]);
 
-    createRenderPass(&renderPass);
+    VkFramebuffer swapchainFramebuffers[swapchainImageCount];
+    for (uint32_t i = 0; i < swapchainImageCount; i++)
+        createFramebuffer((VkImageView[]){swapchainImageViews[i]}, 1, renderPass, swapchainExtent, &swapchainFramebuffers[i]);
 
+    for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        createSemaphore(&imageAvailableSemaphores[i]);
+        createSemaphore(&renderFinishedSemaphores[i]);
+        createFence(1, &inFlightFences[i]);
+    }
+
+    // utility data
+    //
+    createCommandPool(VK_COMMAND_POOL_CREATE_TRANSIENT_BIT, &shortCommandPool);
+
+    // fill default pipeline states
     fillDefaultStates();
 
+    // descriptor set layouts
+    //
     {
         VkDescriptorSetLayoutBinding spriteImageBinding = {};
         createDescriptorSetLayoutBinding(0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT, &spriteImageBinding);
@@ -60,15 +88,19 @@ int main() {
         createDescriptorSetLayout((VkDescriptorSetLayoutBinding[]){spriteBufferBinding, spriteImageBinding}, 2, &animatedSpriteDescriptorSetLayout);
     }
 
-    createPipelineLayout(&staticSpritePipelineLayout, &staticSpriteDescriptorSetLayout, 1, NULL, 0);
+    // pipeline layouts
+    //
+    createPipelineLayout(&staticSpriteDescriptorSetLayout, 1, NULL, 0, &staticSpritePipelineLayout);
     {
         VkPushConstantRange pcr = {};
         pcr.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
         pcr.offset = 0;
         pcr.size = sizeof(uint32_t);
-        createPipelineLayout(&animatedSpritePipelineLayout, &animatedSpriteDescriptorSetLayout, 1, &pcr, 1);
+        createPipelineLayout(&animatedSpriteDescriptorSetLayout, 1, &pcr, 1, &animatedSpritePipelineLayout);
     }
 
+    // pipelines
+    //
     {
         VkDynamicState dynamicStates[2] = {VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR};
 
@@ -81,25 +113,12 @@ int main() {
         viewportStateInfo.pViewports = NULL;
         viewportStateInfo.pScissors = NULL;
 
-        createGraphicsPipeline(&staticSpritePipeline, staticSpritePipelineLayout, renderPass, 0, "assets/shaders/quad/quad.vert.spv", "assets/shaders/quad/quad.frag.spv", NULL, NULL, &defaultVertexInputStateInfo, &defaultInputAssemblyStateInfo, NULL, &defaultDepthStencilStateInfo, &viewportStateInfo, &defaultRasterizationStateInfo, &defaultMultisampleStateInfo, &defaultBlendStateInfo, &dynamicStateInfo);
-        createGraphicsPipeline(&animatedSpritePipeline, animatedSpritePipelineLayout, renderPass, 0, "assets/shaders/animated/animated.vert.spv", "assets/shaders/animated/animated.frag.spv", NULL, NULL, &defaultVertexInputStateInfo, &defaultInputAssemblyStateInfo, NULL, &defaultDepthStencilStateInfo, &viewportStateInfo, &defaultRasterizationStateInfo, &defaultMultisampleStateInfo, &defaultBlendStateInfo, &dynamicStateInfo);
+        createGraphicsPipeline(staticSpritePipelineLayout, renderPass, 0, "assets/shaders/quad/quad.vert.spv", "assets/shaders/quad/quad.frag.spv", NULL, NULL, &defaultVertexInputStateInfo, &defaultInputAssemblyStateInfo, NULL, &defaultDepthStencilStateInfo, &viewportStateInfo, &defaultRasterizationStateInfo, &defaultMultisampleStateInfo, &defaultBlendStateInfo, &dynamicStateInfo, &staticSpritePipeline);
+        createGraphicsPipeline(animatedSpritePipelineLayout, renderPass, 0, "assets/shaders/animated/animated.vert.spv", "assets/shaders/animated/animated.frag.spv", NULL, NULL, &defaultVertexInputStateInfo, &defaultInputAssemblyStateInfo, NULL, &defaultDepthStencilStateInfo, &viewportStateInfo, &defaultRasterizationStateInfo, &defaultMultisampleStateInfo, &defaultBlendStateInfo, &dynamicStateInfo, &animatedSpritePipeline);
     }
 
-    createCommandPool(&mainCommandPool, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
-    createCommandPool(&shortCommandPool, VK_COMMAND_POOL_CREATE_TRANSIENT_BIT);
-
-    createSwapchainCommandBuffers(swapchainCommandBuffers, mainCommandPool);
-
-    VkFramebuffer swapchainFramebuffers[swapchainImageCount];
-    for (uint32_t i = 0; i < swapchainImageCount; i++)
-        createFramebuffer((VkImageView[]){swapchainImageViews[i]}, 1, renderPass, swapchainExtent, &swapchainFramebuffers[i]);
-
-    for (uint32_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-        createSemaphore(&imageAvailableSemaphores[i]);
-        createSemaphore(&renderFinishedSemaphores[i]);
-        createFence(1, &inFlightFences[i]);
-    }
-
+    // buffers
+    //
     createAndFillBufferFromStaging(sizeof(vertex) * QUAD_VERT_NUM, quadVertexData, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadVertexBuffer, &quadVertexBufferMemory);
     createAndFillBufferFromStaging(sizeof(uint32_t) * QUAD_IDX_NUM, quadIndexData, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadIndexBuffer, &quadIndexBufferMemory);
 
@@ -181,7 +200,7 @@ int main() {
     vkDestroyBuffer(device, quadVertexBuffer, NULL);
     vkFreeMemory(device, quadVertexBufferMemory, NULL);
     vkDestroyCommandPool(device, shortCommandPool, NULL);
-    vkDestroyCommandPool(device, mainCommandPool, NULL);
+    vkDestroyCommandPool(device, swapchainCommandPool, NULL);
     vkDestroyPipeline(device, staticSpritePipeline, NULL);
     vkDestroyPipelineLayout(device, staticSpritePipelineLayout, NULL);
     vkDestroyPipeline(device, animatedSpritePipeline, NULL);

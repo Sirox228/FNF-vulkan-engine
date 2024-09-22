@@ -2,10 +2,11 @@
 #include "vk/descriptor.h"
 #include "vk/sampler.h"
 #include "vk/vkutil.h"
+#include "vk/buffer.h"
+#include "vk/image.h"
 #include "atlas/xmlatlas.h"
 #include <stdlib.h>
 #include <cglm/cglm.h>
-#include <vulkan/vulkan_core.h>
 
 sprite staticSpriteCreate(char* imgPath, float x, float y) {
 	sprite spr;
@@ -26,7 +27,7 @@ sprite staticSpriteCreate(char* imgPath, float x, float y) {
     spr.scissor.offset = (VkOffset2D){0, 0};
     spr.scissor.extent = swapchainExtent;
 
-    createSampler(&spr.sampler);
+    createSampler(VK_FILTER_LINEAR, VK_FILTER_LINEAR, &spr.sampler);
 
     VkDescriptorPoolSize poolSize = {};
     createDescriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, &poolSize);
@@ -71,7 +72,7 @@ sprite animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, floa
     spr.scissor.offset = (VkOffset2D){0, 0};
     spr.scissor.extent = swapchainExtent;
 
-    createSampler(&spr.sampler);
+    createSampler(VK_FILTER_LINEAR, VK_FILTER_LINEAR, &spr.sampler);
 
     spr.atlas = parseXmlAtlas(xmlPath, spr.viewport.width, spr.viewport.height);
     spr.animIndex = 0;

@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void createSwapchainCommandBuffers(VkCommandBuffer* pCommandBuffers, VkCommandPool commandPool) {
+void createCommandBuffers(uint32_t commandBufferCount, VkCommandPool commandPool, VkCommandBuffer* pCommandBuffers) {
     VkCommandBufferAllocateInfo cmdBufInfo = {};
     cmdBufInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     cmdBufInfo.commandPool = commandPool;
     cmdBufInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    cmdBufInfo.commandBufferCount = MAX_FRAMES_IN_FLIGHT;
+    cmdBufInfo.commandBufferCount = commandBufferCount;
 
     if (vkAllocateCommandBuffers(device, &cmdBufInfo, pCommandBuffers) != VK_SUCCESS) {
         printf("failed to allocate swapchain command buffers\n");
@@ -49,8 +49,8 @@ void submitSingleTimeCmdBuf(VkCommandBuffer* pCommandBuffer) {
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = pCommandBuffer;
 
-    vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
 
-    vkQueueWaitIdle(graphicsQueue);
+    vkQueueWaitIdle(queue);
     vkFreeCommandBuffers(device, shortCommandPool, 1, pCommandBuffer);
 }

@@ -4,7 +4,7 @@
 
 #define DEVICE_EXTS_COUNT 1
 
-void createDevice(VkDevice* pDevice, VkPhysicalDevice sourcePhysicalDevice) {
+void createDevice(VkPhysicalDevice sourcePhysicalDevice, VkDevice* pDevice) {
     const char* layers[1] = {"VK_LAYER_KHRONOS_validation"};
     #ifdef VALIDATION
     uint8_t layerCount = 1;

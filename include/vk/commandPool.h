@@ -3,6 +3,6 @@
 
 #include <vulkan/vulkan.h>
 
-void createCommandPool(VkCommandPool* pPool, VkCommandPoolCreateFlagBits flags);
+void createCommandPool(VkCommandPoolCreateFlagBits flags, VkCommandPool* pPool);
 
 #endif

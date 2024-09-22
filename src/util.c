@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char* getFileContent(char* path, uint32_t* pContentSize) {
+void getFileContent(char* path, uint32_t* pContentSize, char** pOutContent) {
     FILE* file = fopen(path, "rb");
     fseek(file, 0, SEEK_END);
     uint32_t fileSize = ftell(file);
@@ -14,7 +14,7 @@ char* getFileContent(char* path, uint32_t* pContentSize) {
 
     *pContentSize = fileSize;
 
-    return content;
+    *pOutContent = content;
 }
 
 uint32_t clamp(uint32_t value, uint32_t min, uint32_t max) {

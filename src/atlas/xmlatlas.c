@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "xmlatlas.h"
+#include "atlas/xmlatlas.h"
 
 typedef struct parserInput {
     float w, h;

@@ -3,7 +3,7 @@
 
 #include <vulkan/vulkan.h>
 
-void createSwapchainCommandBuffers(VkCommandBuffer* pCommandBuffers, VkCommandPool commandPool);
+void createCommandBuffers(uint32_t commandBufferCount, VkCommandPool commandPool, VkCommandBuffer* pCommandBuffers);
 VkCommandBuffer getSingleTimeCmdBuf();
 void submitSingleTimeCmdBuf(VkCommandBuffer* pCommandBuffer);
 

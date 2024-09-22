@@ -1,6 +1,6 @@
 #include "holder.h"
 
-void createSampler(VkSampler* pSampler) {
+void createSampler(VkFilter minFilter, VkFilter magFilter, VkSampler* pSampler) {
     VkSamplerCreateInfo samplerInfo = {};
     samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
@@ -8,15 +8,15 @@ void createSampler(VkSampler* pSampler) {
     samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
     samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
     samplerInfo.mipLodBias = 0.0f;
-    samplerInfo.magFilter = VK_FILTER_LINEAR;
-    samplerInfo.minFilter = VK_FILTER_LINEAR;
+    samplerInfo.magFilter = magFilter;
+    samplerInfo.minFilter = minFilter;
     samplerInfo.anisotropyEnable = deviceFeatures.samplerAnisotropy;
     samplerInfo.maxAnisotropy = deviceProperties.limits.maxSamplerAnisotropy;
     samplerInfo.compareEnable = VK_FALSE;
     samplerInfo.compareOp = VK_COMPARE_OP_NEVER;
     samplerInfo.minLod = 0.0f;
     samplerInfo.maxLod = 0.0f;
-    samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
+    samplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
 
     if (vkCreateSampler(device, &samplerInfo, NULL, pSampler) != VK_SUCCESS) {

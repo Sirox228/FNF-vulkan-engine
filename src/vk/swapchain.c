@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-void createSwapchain(VkSwapchainKHR* pSwapchain, VkSurfaceKHR sourceSurface) {
+void createSwapchain(VkSurfaceKHR sourceSurface, VkSwapchainKHR* pSwapchain) {
     if (surfaceCapabilities.currentExtent.width != UINT32_MAX) {
     	swapchainExtent = surfaceCapabilities.currentExtent;
     } else {

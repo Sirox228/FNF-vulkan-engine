@@ -6,43 +6,83 @@
 #include "vk/vertex.h"
 #include "config.h"
 
-extern SDL_Window* window;
+// game global variables
+//
+// flag which closes the game if set to 0
 extern uint8_t active;
+// time passed since the last frame (time delta)
+extern float timeDelta;
+
+// sdl window handle
+extern SDL_Window* window;
+
+// vulkan global data
+//
 extern VkInstance instance;
 extern VkSurfaceKHR surface;
+extern VkDevice device;
+extern VkQueue queue;
 extern VkPhysicalDevice physicalDevice;
+// physical device properties
+extern VkPhysicalDeviceProperties deviceProperties;
+extern VkPhysicalDeviceFeatures deviceFeatures;
+extern VkPhysicalDeviceMemoryProperties deviceMemProperties;
+// index of the queue family we're using
+extern uint32_t queueFamilyIndex;
+// surface properties
 extern VkSurfaceCapabilitiesKHR surfaceCapabilities;
 extern VkSurfaceFormatKHR surfaceFormat;
 extern VkPresentModeKHR surfacePresentMode;
-extern uint32_t queueFamilyIndex;
-extern VkPhysicalDeviceMemoryProperties physicalDeviceMemProps;
-extern VkPhysicalDeviceProperties deviceProperties;
-extern VkPhysicalDeviceFeatures deviceFeatures;
-extern VkDevice device;
-extern VkQueue graphicsQueue;
-extern VkExtent2D swapchainExtent;
-extern VkSwapchainKHR swapchain;
-extern VkRenderPass renderPass;
-extern VkPipelineLayout staticSpritePipelineLayout;
-extern VkPipeline staticSpritePipeline;
-extern VkCommandPool mainCommandPool;
-extern VkCommandPool shortCommandPool;
-extern VkCommandBuffer swapchainCommandBuffers[MAX_FRAMES_IN_FLIGHT];
 
+// render passes
+//
+extern VkRenderPass renderPass;
+
+// swapchain data
+//
+extern VkSwapchainKHR swapchain;
+extern VkExtent2D swapchainExtent;
+extern VkCommandPool swapchainCommandPool;
+extern VkCommandBuffer swapchainCommandBuffers[MAX_FRAMES_IN_FLIGHT];
+extern VkSemaphore imageAvailableSemaphores[MAX_FRAMES_IN_FLIGHT];
+extern VkSemaphore renderFinishedSemaphores[MAX_FRAMES_IN_FLIGHT];
+extern VkFence inFlightFences[MAX_FRAMES_IN_FLIGHT];
+// the index used for duplicated resources (it is updated im main loop)
+extern uint32_t frame;
+
+// utility data
+//
+// command pool for single-time-submit command buffers (created with VK_COMMAND_POOL_CREATE_TRANSIENT_BIT flag)
+extern VkCommandPool shortCommandPool;
+// clear (background) color value
+extern VkClearValue clearColorValue;
+
+// descriptor set layouts
+//
+extern VkDescriptorSetLayout staticSpriteDescriptorSetLayout;
+extern VkDescriptorSetLayout animatedSpriteDescriptorSetLayout;
+
+// pipeline layouts
+//
+extern VkPipelineLayout staticSpritePipelineLayout;
+extern VkPipelineLayout animatedSpritePipelineLayout;
+
+// pipelines
+//
+extern VkPipeline staticSpritePipeline;
+extern VkPipeline animatedSpritePipeline;
+
+// buffers
+//
+// vertex and index buffers for a quad
 extern VkBuffer quadVertexBuffer;
 extern VkDeviceMemory quadVertexBufferMemory;
 extern VkBuffer quadIndexBuffer;
 extern VkDeviceMemory quadIndexBufferMemory;
-
-extern VkSemaphore imageAvailableSemaphores[MAX_FRAMES_IN_FLIGHT];
-extern VkSemaphore renderFinishedSemaphores[MAX_FRAMES_IN_FLIGHT];
-extern VkFence inFlightFences[MAX_FRAMES_IN_FLIGHT];
-extern uint32_t frame;
-
-
+// quad buffers data
 #define QUAD_VERT_NUM 4
-extern vertex quadVertexData[QUAD_VERT_NUM];
 #define QUAD_IDX_NUM 6
+extern vertex quadVertexData[QUAD_VERT_NUM];
 extern uint32_t quadIndexData[QUAD_IDX_NUM];
 
 // default pipeline states
@@ -55,7 +95,7 @@ extern VkVertexInputBindingDescription defaultVertInpBindDesc;
 extern VkVertexInputAttributeDescription defaultVertInpAttrDesc;
 extern VkPipelineVertexInputStateCreateInfo defaultVertexInputStateInfo;
 extern VkPipelineInputAssemblyStateCreateInfo defaultInputAssemblyStateInfo;
-// (sirox) if you're using tessellation shaders, specify this input assembly state
+// if you're using tessellation shaders, specify this input assembly state
 extern VkPipelineInputAssemblyStateCreateInfo defaultTessellationInputAssemblyStateInfo;
 extern VkPipelineTessellationStateCreateInfo defaultTessellationStateInfo;
 extern VkPipelineDepthStencilStateCreateInfo defaultDepthStencilStateInfo;
@@ -66,14 +106,5 @@ extern VkPipelineRasterizationStateCreateInfo defaultRasterizationStateInfo;
 extern VkPipelineMultisampleStateCreateInfo defaultMultisampleStateInfo;
 extern VkPipelineColorBlendAttachmentState defaultAlphaBlendAttachment;
 extern VkPipelineColorBlendStateCreateInfo defaultBlendStateInfo;
-
-extern VkClearValue clearColorValue;
-
-extern VkDescriptorSetLayout staticSpriteDescriptorSetLayout;
-extern VkDescriptorSetLayout animatedSpriteDescriptorSetLayout;
-extern VkPipelineLayout animatedSpritePipelineLayout;
-extern VkPipeline animatedSpritePipeline;
-
-extern float timeDelta;
 
 #endif

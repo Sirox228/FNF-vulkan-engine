@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void createShaderModule(VkShaderModule* pShaderModule, char* pCode, uint32_t codeSize) {
+void createShaderModule(char* pCode, uint32_t codeSize, VkShaderModule* pShaderModule) {
     VkShaderModuleCreateInfo shaderModuleInfo = {};
     shaderModuleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     shaderModuleInfo.pCode = (uint32_t*)pCode;
