@@ -4,8 +4,8 @@ project(FNF-vulkan-engine LANGUAGES C VERSION 1.0)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-option(VALIDATION "enable validation layer" ON)
-option(VK_NO_PROTOTYPES "when enabled, vulkan functions will be loaded at runtime instead of linking with vulkan library at compile-time" OFF)
+option(VALIDATION "enable validation layer" OFF)
+option(VK_NO_PROTOTYPES "when enabled, vulkan functions will be loaded at runtime instead of linking with vulkan library at compile-time" ON)
 
 if(VALIDATION)
     add_compile_definitions(VALIDATION)
