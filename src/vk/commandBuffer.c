@@ -49,6 +49,7 @@ void submitSingleTimeCmdBuf(VkCommandBuffer* pCommandBuffer) {
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = pCommandBuffer;
 
+    // TODO: make proper synchronization here
     vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
 
     vkQueueWaitIdle(queue);
