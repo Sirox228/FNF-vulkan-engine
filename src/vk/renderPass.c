@@ -2,45 +2,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void createRenderPass(VkRenderPass* pRenderPass) {
-    VkAttachmentDescription colorAttachment = {};
-    colorAttachment.format = surfaceFormat.format;
-    colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+void createAttachmentDescription(VkFormat format, VkSampleCountFlagBits samples, VkAttachmentLoadOp loadOp, VkAttachmentStoreOp storeOp, VkAttachmentLoadOp stencilLoadOp, VkAttachmentStoreOp stencilStoreOp, VkImageLayout initialLayout, VkImageLayout finalLayout, VkAttachmentDescription* pAttachmentDescription) {
+    pAttachmentDescription->format = format;
+    pAttachmentDescription->samples = samples;
+    pAttachmentDescription->loadOp = loadOp;
+    pAttachmentDescription->storeOp = storeOp;
+    pAttachmentDescription->stencilLoadOp = stencilLoadOp;
+    pAttachmentDescription->stencilStoreOp = stencilStoreOp;
+    pAttachmentDescription->initialLayout = initialLayout;
+    pAttachmentDescription->finalLayout = finalLayout;
+}
 
-    VkAttachmentReference colorAttachmentRef;
-    colorAttachmentRef.attachment = 0;
-    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+void createAttachmentReference(uint32_t attachment, VkImageLayout layout, VkAttachmentReference* pAttachmentReference) {
+    pAttachmentReference->attachment = attachment;
+    pAttachmentReference->layout = layout;
+} 
 
-    VkAttachmentDescription attachmentDescs[1] = {colorAttachment};
+void createSubpassDescription(VkPipelineBindPoint pipelineBindPoint, uint32_t colorAttachmentCount, VkAttachmentReference* pColorAttachments, VkAttachmentReference* pResolveAttachments, VkAttachmentReference* pDepthStencilAttachment, uint32_t inputAttachmentCount, VkAttachmentReference* pInputAttachments, uint32_t preserveAttachmentCount, uint32_t* pPreserveAttachments, VkSubpassDescription* pSubpassDescription) {
+    pSubpassDescription->pipelineBindPoint = pipelineBindPoint;
+    pSubpassDescription->colorAttachmentCount = colorAttachmentCount;
+    pSubpassDescription->pColorAttachments = pColorAttachments;
+    pSubpassDescription->pResolveAttachments = pResolveAttachments;
+    pSubpassDescription->pDepthStencilAttachment = pDepthStencilAttachment;
+    pSubpassDescription->inputAttachmentCount = inputAttachmentCount;
+    pSubpassDescription->pInputAttachments = pInputAttachments;
+    pSubpassDescription->preserveAttachmentCount = preserveAttachmentCount;
+    pSubpassDescription->pPreserveAttachments = pPreserveAttachments;
+}
 
-    VkSubpassDescription subpassDesc = {};
-    subpassDesc.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpassDesc.colorAttachmentCount = 1;
-    subpassDesc.pColorAttachments = &colorAttachmentRef;
-    subpassDesc.pDepthStencilAttachment = NULL;
+void createSubpassDependency(uint32_t srcSubpass, uint32_t dstSubpass, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkDependencyFlags dependencyFlags, VkSubpassDependency* pSubpassDependency) {
+    pSubpassDependency->srcSubpass = srcSubpass;
+    pSubpassDependency->dstSubpass = dstSubpass;
+    pSubpassDependency->srcStageMask = srcStageMask;
+    pSubpassDependency->dstStageMask = dstStageMask;
+    pSubpassDependency->srcAccessMask = srcAccessMask;
+    pSubpassDependency->dstAccessMask = dstAccessMask;
+    pSubpassDependency->dependencyFlags = dependencyFlags;
+}
 
-    VkSubpassDependency dependency = {};
-    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-    dependency.dstSubpass = 0;
-    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-    dependency.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-
+void createRenderPass(uint32_t attachmentCount, VkAttachmentDescription* pAttachments, uint32_t subpassCount, VkSubpassDescription* pSubpasses, uint32_t dependencyCount, VkSubpassDependency* pDependencies, VkRenderPass* pRenderPass) {
     VkRenderPassCreateInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.attachmentCount = 1;
-    renderPassInfo.pAttachments = attachmentDescs;
-    renderPassInfo.subpassCount = 1;
-    renderPassInfo.pSubpasses = &subpassDesc;
-    renderPassInfo.dependencyCount = 1;
-    renderPassInfo.pDependencies = &dependency;
+    renderPassInfo.attachmentCount = attachmentCount;
+    renderPassInfo.pAttachments = pAttachments;
+    renderPassInfo.subpassCount = subpassCount;
+    renderPassInfo.pSubpasses = pSubpasses;
+    renderPassInfo.dependencyCount = dependencyCount;
+    renderPassInfo.pDependencies = pDependencies;
 
     if (vkCreateRenderPass(device, &renderPassInfo, NULL, pRenderPass) != VK_SUCCESS) {
     	printf("failed to create renderpass\n");

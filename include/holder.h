@@ -36,7 +36,22 @@ extern VkPresentModeKHR surfacePresentMode;
 
 // render passes
 //
-extern VkRenderPass renderPass;
+extern VkRenderPass baseRenderPass;
+extern VkRenderPass finalRenderPass;
+
+// image data 
+//
+extern VkImage prePostProcessImage;
+extern VkDeviceMemory prePostProcessImageMemory;
+extern VkImageView prePostProcessImageView;
+extern VkFramebuffer prePostProcessImageFramebuffer;
+extern VkSampler prePostProcessImageSampler;
+
+extern VkImage hdrBloomDownsampledImage;
+extern VkDeviceMemory hdrBloomDownsampledImageMemory;
+extern VkImageView hdrBloomDownsampledImageView;
+extern VkFramebuffer hdrBloomDownsampledImageFramebuffer;
+extern VkSampler hdrBloomDownsampledImageSampler;
 
 // swapchain data
 //
@@ -61,16 +76,31 @@ extern VkClearValue clearColorValue;
 //
 extern VkDescriptorSetLayout staticSpriteDescriptorSetLayout;
 extern VkDescriptorSetLayout animatedSpriteDescriptorSetLayout;
+extern VkDescriptorSetLayout prePostProcessImageDescriptorSetLayout;
+extern VkDescriptorSetLayout hdrBloomDownsampledImageDescriptorSetLayout;
+
+// descriptor pools
+//
+extern VkDescriptorPool postProcessDescriptorPool;
+
+// descriptor sets
+//
+extern VkDescriptorSet prePostProcessImageDescriptorSet;
+extern VkDescriptorSet hdrBloomDownsampledDescriptorSet;
 
 // pipeline layouts
 //
 extern VkPipelineLayout staticSpritePipelineLayout;
 extern VkPipelineLayout animatedSpritePipelineLayout;
+extern VkPipelineLayout hdrBloomUpsamplePipelineLayout;
+extern VkPipelineLayout hdrBloomDownsamplePipelineLayout;
 
 // pipelines
 //
 extern VkPipeline staticSpritePipeline;
 extern VkPipeline animatedSpritePipeline;
+extern VkPipeline hdrBloomUpsamplePipeline;
+extern VkPipeline hdrBloomDownsamplePipeline;
 
 // buffers
 //

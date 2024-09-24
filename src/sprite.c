@@ -31,7 +31,7 @@ sprite staticSpriteCreate(char* imgPath, float x, float y) {
 
     VkDescriptorPoolSize poolSize = {};
     createDescriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, &poolSize);
-    createDescriptorPool(&poolSize, 1, &spr.descriptorPool);
+    createDescriptorPool(1, &poolSize, 1, &spr.descriptorPool);
     
     createDescriptorSets(spr.descriptorPool, 1, &staticSpriteDescriptorSetLayout, &spr.descriptorSet);
 
@@ -119,7 +119,7 @@ sprite animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, floa
     VkDescriptorPoolSize imagePoolSize = {}, bufferPoolSize = {};
     createDescriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, &imagePoolSize);
     createDescriptorPoolSize(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, &bufferPoolSize);
-    createDescriptorPool((VkDescriptorPoolSize[]){imagePoolSize, bufferPoolSize}, 2, &spr.descriptorPool);
+    createDescriptorPool(1, (VkDescriptorPoolSize[]){imagePoolSize, bufferPoolSize}, 2, &spr.descriptorPool);
     
     createDescriptorSets(spr.descriptorPool, 1, &animatedSpriteDescriptorSetLayout, &spr.descriptorSet);
 

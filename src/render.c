@@ -17,8 +17,8 @@ void recordCommands(VkCommandBuffer* pCmdBuf, uint32_t index, VkFramebuffer* pFr
 
     VkRenderPassBeginInfo rpBeginInfo = {};
     rpBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    rpBeginInfo.renderPass = renderPass;
-    rpBeginInfo.framebuffer = *pFramebuffer;
+    rpBeginInfo.renderPass = baseRenderPass;
+    rpBeginInfo.framebuffer = prePostProcessImageFramebuffer;
     rpBeginInfo.renderArea.offset = (VkOffset2D){0, 0};
     rpBeginInfo.renderArea.extent = swapchainExtent;
     rpBeginInfo.clearValueCount = 1;
@@ -59,6 +59,33 @@ void recordCommands(VkCommandBuffer* pCmdBuf, uint32_t index, VkFramebuffer* pFr
             vkCmdDrawIndexed(cmdBuf, QUAD_IDX_NUM, 1, 0, 0, 0);
         }
     }
+
+    vkCmdEndRenderPass(cmdBuf);
+
+    rpBeginInfo.framebuffer = hdrBloomDownsampledImageFramebuffer;
+
+    vkCmdBeginRenderPass(cmdBuf, &rpBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+    vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, hdrBloomDownsamplePipeline);
+    vkCmdBindVertexBuffers(cmdBuf, 0, 1, &quadVertexBuffer, quadVertexBufferOffsets);
+    vkCmdBindIndexBuffer(cmdBuf, quadIndexBuffer, 0, VK_INDEX_TYPE_UINT32);
+    vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, hdrBloomDownsamplePipelineLayout, 0, 1, &prePostProcessImageDescriptorSet, 0, NULL);
+
+    vkCmdDrawIndexed(cmdBuf, QUAD_IDX_NUM, 1, 0, 0, 0);
+
+    vkCmdEndRenderPass(cmdBuf);
+
+    rpBeginInfo.renderPass = finalRenderPass;
+    rpBeginInfo.framebuffer = *pFramebuffer;
+
+    vkCmdBeginRenderPass(cmdBuf, &rpBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+    vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, hdrBloomUpsamplePipeline);
+    vkCmdBindVertexBuffers(cmdBuf, 0, 1, &quadVertexBuffer, quadVertexBufferOffsets);
+    vkCmdBindIndexBuffer(cmdBuf, quadIndexBuffer, 0, VK_INDEX_TYPE_UINT32);
+    vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, hdrBloomUpsamplePipelineLayout, 0, 2, (VkDescriptorSet[]){prePostProcessImageDescriptorSet, hdrBloomDownsampledDescriptorSet}, 0, NULL);
+
+    vkCmdDrawIndexed(cmdBuf, QUAD_IDX_NUM, 1, 0, 0, 0);
 
     vkCmdEndRenderPass(cmdBuf);
 

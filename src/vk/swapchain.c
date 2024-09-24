@@ -6,18 +6,6 @@
 #include <limits.h>
 
 void createSwapchain(VkSurfaceKHR sourceSurface, VkSwapchainKHR* pSwapchain) {
-    if (surfaceCapabilities.currentExtent.width != UINT32_MAX) {
-    	swapchainExtent = surfaceCapabilities.currentExtent;
-    } else {
-    	int32_t w, h;
-    	SDL_Vulkan_GetDrawableSize(window, &w, &h);
-
-    	swapchainExtent = (VkExtent2D){
-    		clamp((uint32_t)w, surfaceCapabilities.minImageExtent.width, surfaceCapabilities.maxImageExtent.width),
-    		clamp((uint32_t)h, surfaceCapabilities.minImageExtent.height, surfaceCapabilities.maxImageExtent.height)
-    	};
-    }
-
     uint32_t imageCount = surfaceCapabilities.minImageCount + 1;
     if (surfaceCapabilities.maxImageCount > 0 && imageCount > surfaceCapabilities.maxImageCount)
     	imageCount = surfaceCapabilities.maxImageCount;

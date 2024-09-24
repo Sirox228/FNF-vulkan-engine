@@ -34,10 +34,10 @@ void createWriteDescriptorSet(VkDescriptorSet dstSet, uint32_t dstBinding, uint3
     pWriteDescriptorSet->pBufferInfo = pBufferInfo;
 }
 
-void createDescriptorPool(VkDescriptorPoolSize pPoolSizes[], uint32_t poolSizeCount, VkDescriptorPool* pPool) {
+void createDescriptorPool(uint32_t maxSets, VkDescriptorPoolSize pPoolSizes[], uint32_t poolSizeCount, VkDescriptorPool* pPool) {
     VkDescriptorPoolCreateInfo poolInfo = {};
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    poolInfo.maxSets = MAX_FRAMES_IN_FLIGHT;
+    poolInfo.maxSets = maxSets;
     poolInfo.poolSizeCount = poolSizeCount;
     poolInfo.pPoolSizes = pPoolSizes;
 
