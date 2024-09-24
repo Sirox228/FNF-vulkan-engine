@@ -5,10 +5,8 @@ layout(binding = 0) uniform sampler2D tex;
 
 layout(location = 0) out vec4 outColor;
 
-const vec2 iResolution = vec2(1280, 720);
-
 void main() {
-    const vec2 texelSize = vec2(1.0) / iResolution;
+    const vec2 texelSize = vec2(1.0) / textureSize(tex, 0);
 
     vec4 A = texture(tex, uv + texelSize * vec2(-1.0, -1.0));
     vec4 B = texture(tex, uv + texelSize * vec2( 0.0, -1.0));

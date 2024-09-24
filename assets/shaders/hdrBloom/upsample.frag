@@ -6,8 +6,6 @@ layout(set = 1, binding = 1) uniform sampler2D downsampledTex;
 
 layout(location = 0) out vec4 outColor;
 
-const vec2 iResolution = vec2(1280.0, 720.0);
-
 vec3 tonemapAces(const vec3 hdrColor) {
     mat3 input_aces_transform = mat3(
         0.59719, 0.07600, 0.02840,
@@ -28,7 +26,7 @@ vec3 tonemapAces(const vec3 hdrColor) {
 }
 
 void main() {
-    const vec2 texelSize = vec2(1.0) / iResolution;
+    const vec2 texelSize = vec2(1.0) / textureSize(tex, 0);
     const vec4 d = texelSize.xyxy * vec4(1.0, 1.0, -1.0, 0.0) * 4.0;
 
     vec3 color;
