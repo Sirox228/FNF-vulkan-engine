@@ -48,6 +48,7 @@ set(SOURCES
 
     #externals
     ${CMAKE_CURRENT_LIST_DIR}/external/stbi/src/stb_image.c
+    ${CMAKE_CURRENT_LIST_DIR}/external/ma/src/miniaudio.c
 )
 
 find_package(SDL2 REQUIRED)
@@ -65,5 +66,6 @@ if(NOT VK_NO_PROTOTYPES)
 endif()
 target_include_directories(FNF-vulkan-engine PUBLIC include)
 target_include_directories(FNF-vulkan-engine PUBLIC external/stbi/include)
+target_include_directories(FNF-vulkan-engine PUBLIC external/ma/include)
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
