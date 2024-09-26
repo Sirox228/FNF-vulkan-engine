@@ -236,6 +236,8 @@ int main() {
     spritePlayAnimation("Agoti_Idle", &agoti);
 
     sprite sprites[] = {spr, spr2, spr3, agoti, spr4};*/
+
+    setFpsLock(144.0f);
     
     stateCreate = titlestateCreate;
     stateUpdate = titlestateUpdate;
@@ -274,6 +276,8 @@ int main() {
         }
 
         stateUpdate();
+
+        SDL_Delay(perFrameDelay);
     }
 
     stateDestroy();

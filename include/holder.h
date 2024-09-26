@@ -20,6 +20,8 @@ extern void (*stateCreate)();
 extern void (*stateUpdate)();
 extern void (*stateDestroy)();
 
+extern float perFrameDelay;
+
 // sdl window handle
 extern SDL_Window* window;
 
