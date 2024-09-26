@@ -211,32 +211,6 @@ int main() {
     createAndFillBufferFromStaging(sizeof(vertex) * QUAD_VERT_NUM, quadVertexData, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadVertexBuffer, &quadVertexBufferMemory);
     createAndFillBufferFromStaging(sizeof(uint32_t) * QUAD_IDX_NUM, quadIndexData, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadIndexBuffer, &quadIndexBufferMemory);
 
-    /*sprite spr = staticSpriteCreate("assets/textures/bruh.png", 0.0f, 0.0f);
-    spr.viewport.width = WINDOW_WIDTH;
-    spr.viewport.height = WINDOW_HEIGHT;
-
-    sprite spr2 = staticSpriteCreate("assets/textures/bruh.png", 0.0f, 0.0f);
-    spr2.scaleX = 10.0;
-
-    sprite spr3 = staticSpriteCreate("assets/textures/bruh.png", 0.0f, 0.0f);
-    spr3.viewport.x = WINDOW_WIDTH - spr3.viewport.width * spr3.scaleX;
-    spr3.scaleX = 2.0;
-    spr3.scaleY = 5.0;
-
-    sprite spr4 = staticSpriteCreate("assets/textures/crown.png", 0.0f, 0.0f);
-    spr4.scaleX = 2.0f;
-    spr4.scaleY = 2.0f;
-    spr4.viewport.x = (WINDOW_WIDTH / 2.0f) - ((spr4.viewport.width * spr4.scaleX) / 2.0f);
-    spr4.viewport.y -= (spr4.viewport.height * spr4.scaleY) / 2;
-
-    sprite agoti = animatedSpriteCreate("assets/animatedSprites/AGOTI.png", "assets/animatedSprites/AGOTI.xml", 100, 100, 24.0f);
-    agoti.scaleX = 0.75f;
-    agoti.scaleY = 0.75f;
-
-    spritePlayAnimation("Agoti_Idle", &agoti);
-
-    sprite sprites[] = {spr, spr2, spr3, agoti, spr4};*/
-
     setFpsLock(144.0f);
     
     stateCreate = titlestateCreate;
@@ -263,11 +237,14 @@ int main() {
         for (uint32_t i = 0; i < globalSpriteCount; i++) {
             if (sprites[i].isAnimated) {
                 if (sprites[i].accumulator >= sprites[i].delay) {
-                    sprites[i].accumulator = 0.0f;
+                    while (sprites[i].accumulator >= sprites[i].delay) {
+                        sprites[i].accumulator = sprites[i].accumulator - sprites[i].delay;
+                        sprites[i].animFrame++;
+                    }
                     if (sprites[i].atlas.animations[sprites[i].animIndex].fcount <= sprites[i].animFrame + 1) {
                         if (sprites[i].loopAnimation) sprites[i].animFrame = 0;
+                        else sprites[i].animFrame = sprites[i].atlas.animations[sprites[i].animIndex].fcount - 1;
                     } else {
-                        sprites[i].animFrame++;
                     }
                 } else {
                     sprites[i].accumulator += timeDelta;
@@ -283,12 +260,6 @@ int main() {
     stateDestroy();
 
     vkDeviceWaitIdle(device);
-
-    /*staticSpriteDestroy(&spr);
-    staticSpriteDestroy(&spr2);
-    staticSpriteDestroy(&spr3);
-    staticSpriteDestroy(&spr4);
-    animatedSpriteDestroy(&agoti);*/
 
     vkDestroyDescriptorPool(device, postProcessDescriptorPool, NULL);
     vkDestroySampler(device, hdrBloomDownsampledImageSampler, NULL);
