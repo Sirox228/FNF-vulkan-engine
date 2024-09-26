@@ -2,6 +2,7 @@
 #define HOLDER_H
 
 #include <SDL2/SDL.h>
+#include <ma/miniaudio.h>
 #include "vk/vkFunctions.h"
 #include "vk/vertex.h"
 #include "config.h"
@@ -24,6 +25,15 @@ extern float perFrameDelay;
 
 // sdl window handle
 extern SDL_Window* window;
+
+// miniaudio global data
+//
+extern ma_decoder maDecoder;
+extern ma_device maDevice;
+// device properties
+extern ma_format outputFormat;
+extern ma_uint32 outputChannels;
+extern ma_uint32 outputSampleRate;
 
 // vulkan global data
 //

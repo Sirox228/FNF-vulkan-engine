@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_vulkan.h>
+#include "ma/audio.h"
 #include "holder.h"
 #include "config.h"
 #include "vk/instance.h"
@@ -27,12 +28,17 @@
 
 int main() {
     SDL_Init(SDL_INIT_EVENTS);
-    window = SDL_CreateWindow("FNF", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI);
+    window = SDL_CreateWindow("Friday Night Funkin'", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI);
 
     if (window == NULL) {
         printf("failed to create sdl window\n");
         exit(0);
     }
+
+    // miniaudio initialization
+    //
+    initAudioDevice(&maDevice, &maDecoder);
+    ma_decoder_init_file("assets/music/freakyMenu/freakyMenu.flac", NULL, &maDecoder);
 
     // vulkan global data and dynamic functions loading (if VK_NO_PROTOTYPES is enabled)
     //
@@ -307,4 +313,6 @@ int main() {
 
     SDL_DestroyWindow(window);
     SDL_Quit();
+
+    ma_device_uninit(&maDevice);
 }

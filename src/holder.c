@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <ma/miniaudio.h>
 #include <vulkan/vulkan.h>
 #include "vk/vertex.h"
 #include "config.h"
@@ -21,6 +22,15 @@ float perFrameDelay = 0;
 
 // sdl window handle
 SDL_Window* window;
+
+// miniaudio global data
+//
+ma_decoder maDecoder;
+ma_device maDevice;
+// device properties
+ma_format outputFormat = ma_format_f32;
+ma_uint32 outputChannels = 2;
+ma_uint32 outputSampleRate = 44100;
 
 // vulkan global data
 //

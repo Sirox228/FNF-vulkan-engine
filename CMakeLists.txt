@@ -26,6 +26,9 @@ set(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/atlas/xmlatlas.c
 
     ${CMAKE_CURRENT_LIST_DIR}/src/states/titlestate.c
+
+    #audio
+    ${CMAKE_CURRENT_LIST_DIR}/src/ma/audio.c
     
     #vulkan stuff
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/vkFunctions.c

@@ -8,9 +8,9 @@
 void titlestateCreate() {
     state_allocate_sprites(3);
 
-    gfTitle = animatedSpriteCreate("assets/textures/gfDanceTitle.png", "assets/atlases/gfDanceTitle.xml", 550, 50, 24);
-    logoTitle = animatedSpriteCreate("assets/textures/logoBumpin.png", "assets/atlases/logoBumpin.xml", -75.0, -75.0, 24);
-    pressTitle = animatedSpriteCreate("assets/textures/titleEnter.png", "assets/atlases/titleEnter.xml", 150, 580, 24);
+    gfTitle = animatedSpriteCreate("assets/textures/gfDanceTitle.png", "assets/atlases/gfDanceTitle.xml", 525, 50, 24);
+    logoTitle = animatedSpriteCreate("assets/textures/logoBumpin.png", "assets/atlases/logoBumpin.xml", -150.0, -110.0, 24);
+    pressTitle = animatedSpriteCreate("assets/textures/titleEnter.png", "assets/atlases/titleEnter.xml", 115, 580, 24);
     spritePlayAnimation("Press Enter to Begin", &pressTitle);
 }
 
