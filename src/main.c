@@ -314,5 +314,6 @@ int main() {
     SDL_DestroyWindow(window);
     SDL_Quit();
 
+    ma_decoder_uninit(&maDecoder);
     ma_device_uninit(&maDevice);
 }
