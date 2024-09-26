@@ -5,6 +5,7 @@
 #include "vk/vkFunctions.h"
 #include "vk/vertex.h"
 #include "config.h"
+#include "sprite.h"
 
 // game global variables
 //
@@ -12,6 +13,12 @@
 extern uint8_t active;
 // time passed since the last frame (time delta)
 extern float timeDelta;
+
+extern sprite* sprites;
+extern uint32_t globalSpriteCount;
+extern void (*stateCreate)();
+extern void (*stateUpdate)();
+extern void (*stateDestroy)();
 
 // sdl window handle
 extern SDL_Window* window;

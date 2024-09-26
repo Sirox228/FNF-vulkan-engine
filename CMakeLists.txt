@@ -24,6 +24,8 @@ set(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/render.c
     ${CMAKE_CURRENT_LIST_DIR}/src/sprite.c
     ${CMAKE_CURRENT_LIST_DIR}/src/atlas/xmlatlas.c
+
+    ${CMAKE_CURRENT_LIST_DIR}/src/states/titlestate.c
     
     #vulkan stuff
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/vkFunctions.c

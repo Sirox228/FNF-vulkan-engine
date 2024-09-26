@@ -21,6 +21,7 @@
 #include "vk/buffer.h"
 #include "vk/sampler.h"
 #include "util.h"
+#include "states/titlestate.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -210,7 +211,7 @@ int main() {
     createAndFillBufferFromStaging(sizeof(vertex) * QUAD_VERT_NUM, quadVertexData, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadVertexBuffer, &quadVertexBufferMemory);
     createAndFillBufferFromStaging(sizeof(uint32_t) * QUAD_IDX_NUM, quadIndexData, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadIndexBuffer, &quadIndexBufferMemory);
 
-    sprite spr = staticSpriteCreate("assets/textures/bruh.png", 0.0f, 0.0f);
+    /*sprite spr = staticSpriteCreate("assets/textures/bruh.png", 0.0f, 0.0f);
     spr.viewport.width = WINDOW_WIDTH;
     spr.viewport.height = WINDOW_HEIGHT;
 
@@ -234,7 +235,13 @@ int main() {
 
     spritePlayAnimation("Agoti_Idle", &agoti);
 
-    sprite sprites[] = {spr, spr2, spr3, agoti, spr4};
+    sprite sprites[] = {spr, spr2, spr3, agoti, spr4};*/
+    
+    stateCreate = titlestateCreate;
+    stateUpdate = titlestateUpdate;
+    stateDestroy = titlestateDestroy;
+
+    stateCreate();
 
     SDL_Event event;
     float startTime = SDL_GetTicks();
@@ -246,12 +253,12 @@ int main() {
     		    }
         }
 
-        render(swapchainFramebuffers, sprites, 5);
+        render(swapchainFramebuffers, sprites, globalSpriteCount);
         frame = (frame + 1) % MAX_FRAMES_IN_FLIGHT;
         float curTime = SDL_GetTicks();
         timeDelta = curTime - startTime;
         startTime = curTime;
-        for (uint32_t i = 0; i < 5; i++) {
+        for (uint32_t i = 0; i < globalSpriteCount; i++) {
             if (sprites[i].isAnimated) {
                 if (sprites[i].accumulator >= sprites[i].delay) {
                     sprites[i].accumulator = 0.0f;
@@ -264,15 +271,19 @@ int main() {
                 }
             }
         }
+
+        stateUpdate();
     }
+
+    stateDestroy();
 
     vkDeviceWaitIdle(device);
 
-    staticSpriteDestroy(&spr);
+    /*staticSpriteDestroy(&spr);
     staticSpriteDestroy(&spr2);
     staticSpriteDestroy(&spr3);
     staticSpriteDestroy(&spr4);
-    animatedSpriteDestroy(&agoti);
+    animatedSpriteDestroy(&agoti);*/
 
     vkDestroyDescriptorPool(device, postProcessDescriptorPool, NULL);
     vkDestroySampler(device, hdrBloomDownsampledImageSampler, NULL);

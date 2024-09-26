@@ -2,6 +2,7 @@
 #include <vulkan/vulkan.h>
 #include "vk/vertex.h"
 #include "config.h"
+#include "sprite.h"
 
 // game global variables
 //
@@ -9,6 +10,12 @@
 uint8_t active = 1;
 // time passed since the last frame (time delta)
 float timeDelta = 0.0f;
+
+sprite* sprites;
+uint32_t globalSpriteCount = 0;
+void (*stateCreate)();
+void (*stateUpdate)();
+void (*stateDestroy)();
 
 // sdl window handle
 SDL_Window* window;

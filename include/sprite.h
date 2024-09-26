@@ -1,7 +1,6 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "holder.h"
 #include "atlas/xmlatlas.h"
 
 typedef struct animationHash {
