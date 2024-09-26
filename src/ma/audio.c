@@ -8,8 +8,6 @@ void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uin
     }
 
     ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount, NULL);
-
-    (void)pInput;
 }
 
 void initAudioDevice(ma_device* pDevice, ma_decoder* pDecoder){
