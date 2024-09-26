@@ -11,7 +11,6 @@
 
 sprite staticSpriteCreate(char* imgPath, float x, float y) {
 	sprite spr;
-	
     {
         int32_t w, h, c;
         createImageTexture(imgPath, &spr.image, &spr.imageMemory, &spr.imageView, &w, &h, &c);
@@ -57,7 +56,6 @@ void staticSpriteDestroy(sprite* pSprite) {
 
 sprite animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, float fps) {
 	sprite spr;
-	
     {
         int32_t w, h, c;
         createImageTexture(imgPath, &spr.image, &spr.imageMemory, &spr.imageView, &w, &h, &c);
@@ -84,7 +82,6 @@ sprite animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, floa
     spr.accumulator = 0;
     spr.isAnimated = 1;
     spr.loopAnimation = 1;
-
     {
         uint32_t tcbufferSize = 0;
         for (uint32_t i = 0; i < spr.atlas.acount; i++) {
