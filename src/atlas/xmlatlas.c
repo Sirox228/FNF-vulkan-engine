@@ -51,6 +51,15 @@ void XMLCALL startElementHandler(void* userData, const char* name, const char** 
              y = atoi(atts[5]),
              sw = atoi(atts[7]),
              sh = atoi(atts[9]);
+    int32_t fx = 0, fy = 0;
+
+    if (atts[10])
+        if (strcmp(atts[10], "frameX") == 0) 
+            fx = atoi(atts[11]);
+
+    if (atts[12])
+        if (strcmp(atts[12], "frameY") == 0)
+            fy = atoi(atts[13]);
 
     // calculate normalized texture coordinates
     float normX = x / inp->w,
@@ -63,7 +72,7 @@ void XMLCALL startElementHandler(void* userData, const char* name, const char** 
         inp->atlas->animations[animIndex].fsize = frameIndex + 5;
         inp->atlas->animations[animIndex].frames = realloc(inp->atlas->animations[animIndex].frames, inp->atlas->animations[animIndex].fsize * sizeof(animframe));
     }
-    inp->atlas->animations[animIndex].frames[frameIndex] = (animframe){sw, sh, NULL};
+    inp->atlas->animations[animIndex].frames[frameIndex] = (animframe){sw, sh, fx, fy, NULL};
     inp->atlas->animations[animIndex].frames[frameIndex].texcoords = malloc(4 * sizeof(vec2));
     inp->atlas->animations[animIndex].frames[frameIndex].texcoords[0][0] = normX;
     inp->atlas->animations[animIndex].frames[frameIndex].texcoords[0][1] = normY;

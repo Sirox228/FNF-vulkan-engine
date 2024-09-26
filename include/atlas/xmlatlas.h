@@ -6,6 +6,7 @@
 
 typedef struct animframe {
     uint32_t w, h;
+    int32_t fx, fy;
     vec2* texcoords;
 } animframe;
 

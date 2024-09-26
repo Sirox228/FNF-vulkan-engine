@@ -32,6 +32,9 @@ void recordCommands(VkCommandBuffer* pCmdBuf, uint32_t index, VkFramebuffer* pFr
     for (uint32_t i = 0; i < spriteCount; i++) {
         if (pSprites[i].isAnimated) {
             viewport = pSprites[i].viewport;
+            viewport.x -= pSprites[i].atlas.animations[pSprites[i].animIndex].frames[pSprites[i].animFrame].fx;
+            viewport.y -= pSprites[i].atlas.animations[pSprites[i].animIndex].frames[pSprites[i].animFrame].fy;
+            //printf("%d %d\n", pSprites[i].atlas.animations[pSprites[i].animIndex].frames[pSprites[i].animFrame].fx, pSprites[i].atlas.animations[pSprites[i].animIndex].frames[pSprites[i].animFrame].fy);
             viewport.width = pSprites[i].atlas.animations[pSprites[i].animIndex].frames[pSprites[i].animFrame].w * pSprites[i].scaleX;
             viewport.height = pSprites[i].atlas.animations[pSprites[i].animIndex].frames[pSprites[i].animFrame].h * pSprites[i].scaleY;
             vkCmdSetViewport(cmdBuf, 0, 1, &viewport);
