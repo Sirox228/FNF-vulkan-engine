@@ -244,7 +244,6 @@ int main() {
                     if (sprites[i].atlas.animations[sprites[i].animIndex].fcount <= sprites[i].animFrame + 1) {
                         if (sprites[i].loopAnimation) sprites[i].animFrame = 0;
                         else sprites[i].animFrame = sprites[i].atlas.animations[sprites[i].animIndex].fcount - 1;
-                    } else {
                     }
                 } else {
                     sprites[i].accumulator += timeDelta;
