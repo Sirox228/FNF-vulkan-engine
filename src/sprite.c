@@ -82,6 +82,7 @@ sprite animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, floa
     spr.delay = 0;
     spr.accumulator = 0;
     spr.isAnimated = 1;
+    spr.loopAnimation = 1;
 
     {
         uint32_t tcbufferSize = 0;

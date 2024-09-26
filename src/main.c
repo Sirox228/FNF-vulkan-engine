@@ -262,9 +262,10 @@ int main() {
             if (sprites[i].isAnimated) {
                 if (sprites[i].accumulator >= sprites[i].delay) {
                     sprites[i].accumulator = 0.0f;
-                    sprites[i].animFrame++;
-                    if (sprites[i].atlas.animations[sprites[i].animIndex].fcount <= sprites[i].animFrame) {
-                        sprites[i].animFrame = 0;
+                    if (sprites[i].atlas.animations[sprites[i].animIndex].fcount <= sprites[i].animFrame + 1) {
+                        if (sprites[i].loopAnimation) sprites[i].animFrame = 0;
+                    } else {
+                        sprites[i].animFrame++;
                     }
                 } else {
                     sprites[i].accumulator += timeDelta;

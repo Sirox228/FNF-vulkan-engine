@@ -31,6 +31,7 @@ typedef struct sprite {
     uint32_t animFrame;
     uint32_t framesOffset;
     uint32_t animIndex;
+    uint8_t loopAnimation;
 } sprite;
 
 sprite staticSpriteCreate(char* imgPath, float x, float y);
