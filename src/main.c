@@ -230,9 +230,9 @@ int main() {
     while (active) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
-    			active = 0;
-    			break;
-    		}
+                active = 0;
+                break;
+            }
         }
 
         render(swapchainFramebuffers, sprites, globalSpriteCount);
