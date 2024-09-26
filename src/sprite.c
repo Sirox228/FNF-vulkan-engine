@@ -10,7 +10,12 @@
 #include <cglm/cglm.h>
 
 sprite staticSpriteCreate(char* imgPath, float x, float y) {
+<<<<<<< HEAD
 	sprite spr;
+=======
+    sprite spr;
+
+>>>>>>> 41f135f (reformat)
     {
         int32_t w, h, c;
         createImageTexture(imgPath, &spr.image, &spr.imageMemory, &spr.imageView, &w, &h, &c);
@@ -55,7 +60,12 @@ void staticSpriteDestroy(sprite* pSprite) {
 }
 
 sprite animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, float fps) {
+<<<<<<< HEAD
 	sprite spr;
+=======
+    sprite spr;
+
+>>>>>>> 41f135f (reformat)
     {
         int32_t w, h, c;
         createImageTexture(imgPath, &spr.image, &spr.imageMemory, &spr.imageView, &w, &h, &c);

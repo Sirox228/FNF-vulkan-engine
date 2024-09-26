@@ -42,16 +42,16 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice) {
 
         uint8_t foundQueue = 0;
         for (uint32_t j = 0; j < queueFamilyCount; j++) {
-    		if (queueFamilyProps[j].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-    			VkBool32 presentSupported = 0;
-    			vkGetPhysicalDeviceSurfaceSupportKHR(devices[i], j, surface, &presentSupported);
-    			
-    			if (presentSupported) {
-    				queueFamilyIndex = j;
+            if (queueFamilyProps[j].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+                VkBool32 presentSupported = 0;
+                vkGetPhysicalDeviceSurfaceSupportKHR(devices[i], j, surface, &presentSupported);
+
+                if (presentSupported) {
+                    queueFamilyIndex = j;
                     foundQueue = 1;
-    				break;
-    			}
-    		}
+                    break;
+                }
+            }
     	}
 
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(devices[i], surface, &surfaceCapabilities);
@@ -64,9 +64,9 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice) {
         uint8_t foundFormat = 0;
         for (int j = 0; j < formatCount; j++) {
             if (surfaceFormats[j].format == VK_FORMAT_R8G8B8A8_SRGB && surfaceFormats[i].colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-    			surfaceFormat = surfaceFormats[j];
+                surfaceFormat = surfaceFormats[j];
                 foundFormat = 1;
-    		}
+            }
     	}
     	if (!foundFormat && formatCount > 0) {
             surfaceFormat = surfaceFormats[0];
@@ -80,9 +80,9 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice) {
         uint8_t foundPresentMode = 0;
         for (int j = 0; j < presentModeCount; j++) {
             if (surfacePresentModes[j] == VK_PRESENT_MODE_MAILBOX_KHR) {
-    			surfacePresentMode = VK_PRESENT_MODE_MAILBOX_KHR;
+                surfacePresentMode = VK_PRESENT_MODE_MAILBOX_KHR;
                 foundPresentMode = 1;
-    		}
+            }
     	}
     	if (!foundPresentMode) {
             surfacePresentMode = VK_PRESENT_MODE_FIFO_KHR;
