@@ -186,5 +186,5 @@ void spritePlayAnimationFromHash(animationHash hashStruct, sprite* pSprite) {
 }
 
 void spriteSetFps(float fps, sprite* pSprite) {
-    pSprite->delay = 1000.0f / fps;
+    pSprite->delay = 1.0f / fps;
 }

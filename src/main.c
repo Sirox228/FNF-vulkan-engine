@@ -226,19 +226,20 @@ int main() {
     stateCreate();
 
     SDL_Event event;
-    float startTime = SDL_GetTicks();
+    double startTime = SDL_GetPerformanceCounter();
     while (active) {
         while (SDL_PollEvent(&event)) {
-    		    if (event.type == SDL_QUIT) {
-    			    active = 0;
-    			    break;
-    		    }
+            if (event.type == SDL_QUIT) {
+    			active = 0;
+    			break;
+    		}
         }
 
         render(swapchainFramebuffers, sprites, globalSpriteCount);
         frame = (frame + 1) % MAX_FRAMES_IN_FLIGHT;
-        float curTime = SDL_GetTicks();
-        timeDelta = curTime - startTime;
+        double curTime = SDL_GetPerformanceCounter();
+        timeDelta = (curTime - startTime) / (double)SDL_GetPerformanceFrequency();
+        //printf("%f\n", timeDelta);
         startTime = curTime;
         for (uint32_t i = 0; i < globalSpriteCount; i++) {
             if (sprites[i].isAnimated) {
