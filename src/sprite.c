@@ -46,6 +46,7 @@ sprite staticSpriteCreate(char* imgPath, float x, float y) {
     spr.isAnimated = 0;
     return spr;
 }
+
 void staticSpriteDestroy(sprite* pSprite) {
     vkDestroyDescriptorPool(device, pSprite->descriptorPool, NULL);
     vkDestroySampler(device, pSprite->sampler, NULL);
