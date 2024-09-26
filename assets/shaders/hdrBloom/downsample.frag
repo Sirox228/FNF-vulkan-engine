@@ -5,6 +5,8 @@ layout(binding = 0) uniform sampler2D tex;
 
 layout(location = 0) out vec4 outColor;
 
+const float threshold = 0.4;
+
 void main() {
     const vec2 texelSize = vec2(1.0) / textureSize(tex, 0);
 
@@ -29,6 +31,8 @@ void main() {
     o += (B + C + H + G) * div.y;
     o += (F + G + L + K) * div.y;
     o += (G + H + M + L) * div.y;
+
+    if (o.r < threshold && o.g < threshold && o.b < threshold) discard;
 
     outColor = o;
 }
