@@ -228,12 +228,12 @@ int main() {
     float startTime = SDL_GetTicks();
     while (active) {
         while (SDL_PollEvent(&event)) {
+            stateEvent(&event);
+
             if (event.type == SDL_QUIT) {
                 active = 0;
                 break;
             }
-
-            stateEvent(&event);
         }
 
         render(swapchainFramebuffers, sprites, globalSpriteCount);
