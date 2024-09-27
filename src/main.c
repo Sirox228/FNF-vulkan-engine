@@ -22,7 +22,7 @@
 #include "vk/buffer.h"
 #include "vk/sampler.h"
 #include "util.h"
-#include "states/titlestate.h"
+#include "funkin/states/titlestate.h"
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,5 +1,5 @@
 #include "holder.h"
-#include "states/state.h"
+#include "funkin/states/state.h"
 
 #define gfTitle sprites[0]
 #define logoTitle sprites[1]
