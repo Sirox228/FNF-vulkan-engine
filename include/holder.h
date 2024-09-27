@@ -29,22 +29,13 @@ extern float startingBPM;
 extern float bpmOverride;
 // song positions
 extern float songPosition;
-extern uint32_t currentMeasure;
 extern uint32_t currentBeat;
 extern uint32_t currentStep;
-extern float currentMeasureTime;
 extern float currentBeatTime;
 extern float currentStepTime;
 // duration
-extern float measureLengthMs;
 extern float beatLengthMs;
 extern float stepLengthMs;
-// measure
-extern float beatsPerMeasure;
-extern uint32_t stepsPerMeasure;
-// time signature
-extern uint32_t timeSignatureNumerator;
-extern uint32_t timeSignatureDenumerator;
 
 // sdl window handle
 //

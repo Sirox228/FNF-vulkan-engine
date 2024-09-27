@@ -26,22 +26,13 @@ float startingBPM = DEFAULT_BPM;
 float bpmOverride;
 // song positions
 float songPosition;
-uint32_t currentMeasure;
 uint32_t currentBeat;
 uint32_t currentStep;
-float currentMeasureTime;
 float currentBeatTime;
 float currentStepTime;
 // duration
-float measureLengthMs;
 float beatLengthMs;
 float stepLengthMs;
-// measure
-float beatsPerMeasure;
-uint32_t stepsPerMeasure;
-// time signature
-uint32_t timeSignatureNumerator = DEFAULT_TIME_SIGNATURE_NUM;
-uint32_t timeSignatureDenumerator = DEFAULT_TIME_SIGNATURE_DEN;
 
 // sdl window handle
 //

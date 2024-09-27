@@ -9,7 +9,5 @@
 #define SECS_PER_MIN 60
 #define MS_PER_SEC 1000
 #define STEPS_PER_BEAT 4
-#define DEFAULT_TIME_SIGNATURE_NUM 4
-#define DEFAULT_TIME_SIGNATURE_DEN 4
 
 #endif
