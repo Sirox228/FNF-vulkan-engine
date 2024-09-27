@@ -26,7 +26,3 @@ uint32_t clamp(uint32_t value, uint32_t min, uint32_t max) {
     }
     return value;
 }
-
-void setFpsLock(float fps) {
-    perFrameDelay = 1000.0f / fps;
-}

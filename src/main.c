@@ -216,8 +216,6 @@ int main() {
     //
     createAndFillBufferFromStaging(sizeof(vertex) * QUAD_VERT_NUM, quadVertexData, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadVertexBuffer, &quadVertexBufferMemory);
     createAndFillBufferFromStaging(sizeof(uint32_t) * QUAD_IDX_NUM, quadIndexData, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadIndexBuffer, &quadIndexBufferMemory);
-
-    setFpsLock(144.0f);
     
     stateCreate = titlestateCreate;
     stateUpdate = titlestateUpdate;
@@ -252,15 +250,12 @@ int main() {
                         if (sprites[i].loopAnimation) sprites[i].animFrame = 0;
                         else sprites[i].animFrame = sprites[i].atlas.animations[sprites[i].animIndex].fcount - 1;
                     }
-                } else {
-                    sprites[i].accumulator += timeDelta;
                 }
+                sprites[i].accumulator += timeDelta;
             }
         }
 
         stateUpdate();
-
-        SDL_Delay(perFrameDelay);
     }
 
     stateDestroy();

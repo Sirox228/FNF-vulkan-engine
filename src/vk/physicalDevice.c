@@ -74,7 +74,7 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice) {
 
     	uint32_t presentModeCount;
     	vkGetPhysicalDeviceSurfacePresentModesKHR(devices[i], surface, &presentModeCount, NULL);
-    	VkPresentModeKHR surfacePresentModes[presentModeCount];
+    	/*VkPresentModeKHR surfacePresentModes[presentModeCount];
     	vkGetPhysicalDeviceSurfacePresentModesKHR(devices[i], surface, &presentModeCount, surfacePresentModes);
 
         uint8_t foundPresentMode = 0;
@@ -86,7 +86,9 @@ void findPhysicalDevice(VkPhysicalDevice* pPhysicalDevice) {
     	}
     	if (!foundPresentMode) {
             surfacePresentMode = VK_PRESENT_MODE_FIFO_KHR;
-        }
+        }*/
+        // FIFO present mode is guaranteed to be support by the specification, so we can skip checking
+        surfacePresentMode = VK_PRESENT_MODE_FIFO_KHR;
 
         vkGetPhysicalDeviceMemoryProperties(devices[i], &deviceMemProperties);
         vkGetPhysicalDeviceProperties(devices[i], &deviceProperties);

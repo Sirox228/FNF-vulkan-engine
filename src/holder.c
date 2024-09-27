@@ -18,8 +18,6 @@ void (*stateCreate)();
 void (*stateUpdate)();
 void (*stateDestroy)();
 
-float perFrameDelay = 0;
-
 // sdl window handle
 SDL_Window* window;
 
