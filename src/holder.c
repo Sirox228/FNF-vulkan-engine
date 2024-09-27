@@ -20,16 +20,14 @@ void (*stateUpdate)();
 void (*stateDestroy)();
 
 // conductor data
+// time since last conductor reset
+float conductorTime = 0.0f;
 // bpm
 float bpm = DEFAULT_BPM;
-float startingBPM = DEFAULT_BPM;
-float bpmOverride;
 // song positions
 float songPosition;
-uint32_t currentBeat;
-uint32_t currentStep;
-float currentBeatTime;
-float currentStepTime;
+float currentBeat;
+float currentStep;
 // duration
 float beatLengthMs;
 float stepLengthMs;

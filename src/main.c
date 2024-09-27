@@ -23,6 +23,7 @@
 #include "vk/sampler.h"
 #include "util.h"
 #include "funkin/states/titlestate.h"
+#include "funkin/timing/conductor.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -39,6 +40,7 @@ int main() {
     //
     initAudioDevice(&maDevice, &maDecoder);
     ma_decoder_init_file("assets/music/freakyMenu/freakyMenu.flac", NULL, &maDecoder);
+    resetConductor(100);
 
     // vulkan global data and dynamic functions loading (if VK_NO_PROTOTYPES is enabled)
     //
@@ -257,6 +259,7 @@ int main() {
             }
         }
 
+        updateConductor();
         stateUpdate();
     }
 

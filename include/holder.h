@@ -23,16 +23,14 @@ extern void (*stateUpdate)();
 extern void (*stateDestroy)();
 
 // conductor data
+// time since last conductor reset
+extern float conductorTime;
 // bpm
 extern float bpm;
-extern float startingBPM;
-extern float bpmOverride;
 // song positions
 extern float songPosition;
-extern uint32_t currentBeat;
-extern uint32_t currentStep;
-extern float currentBeatTime;
-extern float currentStepTime;
+extern float currentBeat;
+extern float currentStep;
 // duration
 extern float beatLengthMs;
 extern float stepLengthMs;
