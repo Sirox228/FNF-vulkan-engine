@@ -218,6 +218,7 @@ int main() {
     createAndFillBufferFromStaging(sizeof(uint32_t) * QUAD_IDX_NUM, quadIndexData, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &quadIndexBuffer, &quadIndexBufferMemory);
     
     stateCreate = titlestateCreate;
+    stateEvent = titlestateEvent;
     stateUpdate = titlestateUpdate;
     stateDestroy = titlestateDestroy;
 
@@ -231,6 +232,8 @@ int main() {
                 active = 0;
                 break;
             }
+
+            stateEvent(&event);
         }
 
         render(swapchainFramebuffers, sprites, globalSpriteCount);

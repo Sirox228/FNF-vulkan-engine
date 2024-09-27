@@ -15,6 +15,7 @@ float timeDelta = 0.0f;
 sprite* sprites;
 uint32_t globalSpriteCount = 0;
 void (*stateCreate)();
+void (*stateEvent)(SDL_Event* event);
 void (*stateUpdate)();
 void (*stateDestroy)();
 

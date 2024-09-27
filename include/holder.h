@@ -18,6 +18,7 @@ extern float timeDelta;
 extern sprite* sprites;
 extern uint32_t globalSpriteCount;
 extern void (*stateCreate)();
+extern void (*stateEvent)(SDL_Event* event);
 extern void (*stateUpdate)();
 extern void (*stateDestroy)();
 

@@ -14,6 +14,10 @@ void titlestateCreate() {
     spritePlayAnimation("Press Enter to Begin", &pressTitle);
 }
 
+void titlestateEvent(SDL_Event* event) {
+
+}
+
 void titlestateUpdate() {
 
 }
