@@ -10,7 +10,7 @@
 // flag which closes the game if set to 0
 uint8_t active = 1;
 // time passed since the last frame (time delta)
-double timeDelta = 0.0f;
+float timeDelta = 0.0f;
 
 sprite* sprites;
 uint32_t globalSpriteCount = 0;

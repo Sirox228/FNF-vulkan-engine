@@ -224,7 +224,7 @@ int main() {
     stateCreate();
 
     SDL_Event event;
-    double startTime = SDL_GetPerformanceCounter();
+    float startTime = SDL_GetTicks();
     while (active) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
@@ -235,17 +235,16 @@ int main() {
 
         render(swapchainFramebuffers, sprites, globalSpriteCount);
         frame = (frame + 1) % MAX_FRAMES_IN_FLIGHT;
-        double curTime = SDL_GetPerformanceCounter();
-        timeDelta = (curTime - startTime) / (double)SDL_GetPerformanceFrequency();
-        //printf("%f\n", timeDelta);
+        float curTime = SDL_GetTicks();
+        timeDelta = curTime - startTime;
         startTime = curTime;
         for (uint32_t i = 0; i < globalSpriteCount; i++) {
             if (sprites[i].isAnimated) {
                 if (sprites[i].accumulator >= sprites[i].delay) {
-                    while (sprites[i].accumulator >= sprites[i].delay) {
+                    do {
                         sprites[i].accumulator = sprites[i].accumulator - sprites[i].delay;
                         sprites[i].animFrame++;
-                    }
+                    } while (sprites[i].accumulator >= sprites[i].delay);
                     if (sprites[i].atlas.animations[sprites[i].animIndex].fcount <= sprites[i].animFrame + 1) {
                         if (sprites[i].loopAnimation) sprites[i].animFrame = 0;
                         else sprites[i].animFrame = sprites[i].atlas.animations[sprites[i].animIndex].fcount - 1;
