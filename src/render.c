@@ -30,6 +30,10 @@ void recordCommands(VkCommandBuffer* pCmdBuf, uint32_t index, VkFramebuffer* pFr
     VkViewport viewport;
 
     for (uint32_t i = 0; i < spriteCount; i++) {
+        if (pSprites[i].isCustomRenderFunction) {
+            pSprites[i].customRenderFunction(cmdBuf, &pSprites[i]);
+            continue;
+        }
         if (pSprites[i].isAnimated) {
             viewport = pSprites[i].viewport;
             viewport.x -= pSprites[i].atlas.animations[pSprites[i].animIndex].frames[pSprites[i].animFrame].fx;
@@ -38,7 +42,8 @@ void recordCommands(VkCommandBuffer* pCmdBuf, uint32_t index, VkFramebuffer* pFr
             viewport.height = pSprites[i].atlas.animations[pSprites[i].animIndex].frames[pSprites[i].animFrame].h * pSprites[i].scaleY;
             vkCmdSetViewport(cmdBuf, 0, 1, &viewport);
             vkCmdSetScissor(cmdBuf, 0, 1, &pSprites[i].scissor);
-            vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, animatedSpritePipeline);
+            if (pSprites[i].isCustomPipeline) vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, pSprites[i].customPipeline);
+            else vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, animatedSpritePipeline);
             vkCmdBindVertexBuffers(cmdBuf, 0, 1, &quadVertexBuffer, quadVertexBufferOffsets);
             vkCmdBindIndexBuffer(cmdBuf, quadIndexBuffer, 0, VK_INDEX_TYPE_UINT32);
             vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, animatedSpritePipelineLayout, 0, 1, &pSprites[i].descriptorSet, 0, NULL);
@@ -53,7 +58,8 @@ void recordCommands(VkCommandBuffer* pCmdBuf, uint32_t index, VkFramebuffer* pFr
             viewport.height *= pSprites[i].scaleY;
             vkCmdSetViewport(cmdBuf, 0, 1, &viewport);
             vkCmdSetScissor(cmdBuf, 0, 1, &pSprites[i].scissor);
-            vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, staticSpritePipeline);
+            if (pSprites[i].isCustomPipeline) vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, pSprites[i].customPipeline);
+            else vkCmdBindPipeline(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, staticSpritePipeline);
             vkCmdBindVertexBuffers(cmdBuf, 0, 1, &quadVertexBuffer, quadVertexBufferOffsets);
             vkCmdBindIndexBuffer(cmdBuf, quadIndexBuffer, 0, VK_INDEX_TYPE_UINT32);
             vkCmdBindDescriptorSets(cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, staticSpritePipelineLayout, 0, 1, &pSprites[i].descriptorSet, 0, NULL);

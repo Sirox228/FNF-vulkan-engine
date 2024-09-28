@@ -21,6 +21,14 @@ typedef struct sprite {
     VkDescriptorSet descriptorSet;
 
     uint8_t isAnimated;
+    // NOTE: if you use custom render function, you must handle everything yourself (in case you want custom render function + custom pipeline, etc.)
+    uint8_t isCustomRenderFunction;
+    // NOTE: when using custom render function note that render pass is already has been started
+    void (*customRenderFunction)(VkCommandBuffer cmdBuf, struct sprite* pSprite);
+    uint8_t isCustomPipeline;
+    // it is user responsibility to destroy pipeline and/or layout they created
+    VkPipelineLayout customPipelineLayout;
+    VkPipeline customPipeline;
 
     // animated stuff
     VkBuffer texcoordBuffer;
