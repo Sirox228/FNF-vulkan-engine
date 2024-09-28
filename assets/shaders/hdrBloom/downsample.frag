@@ -5,7 +5,7 @@ layout(binding = 0) uniform sampler2D tex;
 
 layout(location = 0) out vec4 outColor;
 
-const float threshold = 0.4;
+const float threshold = 0.6;
 
 void main() {
     const vec2 texelSize = vec2(1.0) / textureSize(tex, 0);
