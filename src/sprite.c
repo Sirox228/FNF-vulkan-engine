@@ -44,6 +44,8 @@ sprite staticSpriteCreate(char* imgPath, float x, float y) {
     vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, NULL);
 
     spr.isAnimated = 0;
+    spr.isCustomRenderFunction = 0;
+    spr.isCustomPipeline = 0;
     return spr;
 }
 
@@ -84,6 +86,8 @@ sprite animatedSpriteCreate(char* imgPath, char* xmlPath, float x, float y, floa
     spr.accumulator = 0;
     spr.isAnimated = 1;
     spr.loopAnimation = 1;
+    spr.isCustomRenderFunction = 0;
+    spr.isCustomPipeline = 0;
     {
         uint32_t tcbufferSize = 0;
         for (uint32_t i = 0; i < spr.atlas.acount; i++) {
