@@ -1,5 +1,5 @@
 #include "vk/vkFunctions.h"
-#include <SDL2/SDL_vulkan.h>
+#include <SDL_vulkan.h>
 #include <stdio.h>
 #include <stdlib.h>
 

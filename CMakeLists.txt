@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.25)
 project(VkFunkin LANGUAGES C VERSION 1.0)
 
 set(CMAKE_C_STANDARD 11)
@@ -61,18 +61,16 @@ set(SOURCES
 find_package(SDL2 REQUIRED)
 find_package(Vulkan REQUIRED)
 find_package(cglm REQUIRED)
-find_package(EXPAT REQUIRED)
+find_package(expat REQUIRED)
 
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
-target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_LIBRARIES} ${EXPAT_LIBRARIES} Vulkan::Headers cglm::cglm)
+target_link_libraries(${CMAKE_PROJECT_NAME} SDL2::SDL2 expat::expat Vulkan::Headers cglm::cglm)
 if(UNIX)
     target_link_libraries(${CMAKE_PROJECT_NAME} m)
 endif()
 if(NOT VK_NO_PROTOTYPES)
     target_link_libraries(${CMAKE_PROJECT_NAME} Vulkan::Vulkan)
 endif()
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC include)
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC external/stbi/include)
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC external/ma/include)
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC include external/stbi/include external/ma/include)
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

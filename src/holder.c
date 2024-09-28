@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <ma/miniaudio.h>
 #include <vulkan/vulkan.h>
 #include "vk/vertex.h"

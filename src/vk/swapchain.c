@@ -1,4 +1,4 @@
-#include <SDL2/SDL_vulkan.h>
+#include <SDL_vulkan.h>
 #include "holder.h"
 #include "util.h"
 #include <stdio.h>

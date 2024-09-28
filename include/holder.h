@@ -1,7 +1,7 @@
 #ifndef HOLDER_H
 #define HOLDER_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <ma/miniaudio.h>
 #include "vk/vkFunctions.h"
 #include "vk/vertex.h"
