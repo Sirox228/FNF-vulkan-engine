@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(int argc, char** argv) {
     SDL_Init(SDL_INIT_EVENTS);
     window = SDL_CreateWindow("Friday Night Funkin'", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI);
 
