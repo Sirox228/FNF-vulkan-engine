@@ -5,9 +5,15 @@
     sprites = (sprite*)malloc(num * sizeof(sprite)); \
     globalSpriteCount = num;
 
+#define state_allocate_sounds(num) \
+    sounds = (ma_sound*)malloc(num * sizeof(ma_sound));
+
 #define state_free_sprites() \
     free(sprites); \
     globalSpriteCount = 0;
+
+#define state_free_sounds() \
+    free(sounds);
 
 #define state_switch_state(create, event, update, destroy) \
     stateDestroy(); \

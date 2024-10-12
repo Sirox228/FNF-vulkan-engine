@@ -13,6 +13,7 @@ uint8_t active = 1;
 float timeDelta = 0.0f;
 
 sprite* sprites;
+ma_sound* sounds;
 uint32_t globalSpriteCount = 0;
 void (*stateCreate)();
 void (*stateEvent)(SDL_Event* event);
@@ -38,12 +39,7 @@ SDL_Window* window;
 
 // miniaudio global data
 //
-ma_decoder maDecoder;
-ma_device maDevice;
-// device properties
-ma_format outputFormat = ma_format_f32;
-ma_uint32 outputChannels = 2;
-ma_uint32 outputSampleRate = 44100;
+ma_engine maEngine;
 
 // vulkan global data
 //

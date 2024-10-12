@@ -18,8 +18,12 @@ void waveTitleRender(VkCommandBuffer cmdBuf, sprite* pSprite) {
 #define waveTitle sprites[2]
 #define pressTitle sprites[3]
 
+#define freakyMenuMusic sounds[0]
+#define confirmSound sounds[1]
+
 void titlestateCreate() {
     state_allocate_sprites(4);
+    state_allocate_sounds(2);
 
     gfTitle = animatedSpriteCreate("assets/textures/gfDanceTitle.png", "assets/atlases/gfDanceTitle.xml", 525, 50, 24);
     logoTitle = animatedSpriteCreate("assets/textures/logoBumpin.png", "assets/atlases/logoBumpin.xml", -150.0, -110.0, 24);
@@ -34,10 +38,16 @@ void titlestateCreate() {
     pushConstantRange.size = sizeof(uint32_t);
     createPipelineLayout(NULL, 0, &pushConstantRange, 1, &waveTitle.customPipelineLayout);
     createGraphicsPipelineDefault(waveTitle.customPipelineLayout, baseRenderPass, 0, "assets/shaders/waveTitle/waveTitle.vert.spv", "assets/shaders/waveTitle/waveTitle.frag.spv", NULL, NULL, &defaultVertexInputStateInfo, NULL, &waveTitle.customPipeline);
+
+    ma_sound_init_from_file(&maEngine, "assets/music/freakyMenu/freakyMenu.flac", 0, NULL, NULL, &freakyMenuMusic);
+    ma_sound_init_from_file(&maEngine, "assets/sounds/confirmMenu.flac", 0, NULL, NULL, &confirmSound);
+    ma_sound_start(&freakyMenuMusic);
 }
 
 void titlestateEvent(SDL_Event* event) {
-
+    if (event->type == SDL_MOUSEBUTTONDOWN) {
+        ma_sound_start(&confirmSound);
+    }
 }
 
 void titlestateUpdate() {
@@ -53,4 +63,8 @@ void titlestateDestroy() {
     animatedSpriteDestroy(&logoTitle);
     animatedSpriteDestroy(&pressTitle);
     state_free_sprites();
+
+    ma_sound_uninit(&freakyMenuMusic);
+    ma_sound_uninit(&confirmSound);
+    state_free_sounds();
 }

@@ -16,6 +16,7 @@ extern uint8_t active;
 extern float timeDelta;
 
 extern sprite* sprites;
+extern ma_sound* sounds;
 extern uint32_t globalSpriteCount;
 extern void (*stateCreate)();
 extern void (*stateEvent)(SDL_Event* event);
@@ -41,12 +42,7 @@ extern SDL_Window* window;
 
 // miniaudio global data
 //
-extern ma_decoder maDecoder;
-extern ma_device maDevice;
-// device properties
-extern ma_format outputFormat;
-extern ma_uint32 outputChannels;
-extern ma_uint32 outputSampleRate;
+extern ma_engine maEngine;
 
 // vulkan global data
 //

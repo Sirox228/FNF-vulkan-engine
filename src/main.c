@@ -1,6 +1,5 @@
 #include <SDL.h>
 #include <SDL_vulkan.h>
-#include "ma/audio.h"
 #include "holder.h"
 #include "config.h"
 #include "vk/instance.h"
@@ -38,8 +37,10 @@ int main(int argc, char** argv) {
 
     // miniaudio initialization
     //
-    initAudioDevice(&maDevice, &maDecoder);
-    ma_decoder_init_file("assets/music/freakyMenu/freakyMenu.flac", NULL, &maDecoder);
+    if (ma_engine_init(NULL, &maEngine) != MA_SUCCESS) {
+        printf("failed to initialize audio engine\n");
+        exit(0);
+    }
     resetConductor(100);
 
     // vulkan global data and dynamic functions loading (if VK_NO_PROTOTYPES is enabled)
@@ -267,6 +268,7 @@ int main(int argc, char** argv) {
 
     vkDeviceWaitIdle(device);
 
+    ma_engine_uninit(&maEngine);
     vkDestroyDescriptorPool(device, postProcessDescriptorPool, NULL);
     vkDestroySampler(device, hdrBloomDownsampledImageSampler, NULL);
     vkDestroyFramebuffer(device, hdrBloomDownsampledImageFramebuffer, NULL);
@@ -314,7 +316,4 @@ int main(int argc, char** argv) {
 
     SDL_DestroyWindow(window);
     SDL_Quit();
-
-    ma_decoder_uninit(&maDecoder);
-    ma_device_uninit(&maDevice);
 }
