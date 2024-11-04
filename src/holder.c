@@ -18,20 +18,17 @@ uint32_t globalSpriteCount = 0;
 void (*stateCreate)();
 void (*stateEvent)(SDL_Event* event);
 void (*stateUpdate)();
+void (*stateStepHit)(uint32_t step);
+void (*stateBeatHit)(uint32_t beat);
 void (*stateDestroy)();
 
 // conductor data
-// time since last conductor reset
-float conductorTime = 0.0f;
-// bpm
-float bpm = DEFAULT_BPM;
-// song positions
-float songPosition;
-float currentBeat;
-float currentStep;
-// duration
-float beatLengthMs;
-float stepLengthMs;
+//
+float bpm = 100.0f;
+float beatCrochet = (60.0f / 100.0f) * 1000.0f;
+float stepCrochet = (60.0f / 100.0f) * 1000.0f / 4.0f;
+uint32_t lastStep = 0;
+uint32_t lastBeat = 0;
 
 // sdl window handle
 //

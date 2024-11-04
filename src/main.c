@@ -22,7 +22,7 @@
 #include "vk/sampler.h"
 #include "util.h"
 #include "funkin/states/titlestate.h"
-#include "funkin/timing/conductor.h"
+#include "funkin/conductor.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -41,7 +41,6 @@ int main(int argc, char** argv) {
         printf("failed to initialize audio engine\n");
         exit(0);
     }
-    resetConductor(100);
 
     // vulkan global data and dynamic functions loading (if VK_NO_PROTOTYPES is enabled)
     //
@@ -223,6 +222,8 @@ int main(int argc, char** argv) {
     stateCreate = titlestateCreate;
     stateEvent = titlestateEvent;
     stateUpdate = titlestateUpdate;
+    stateStepHit = titlestateStepHit;
+    stateBeatHit = titlestateBeatHit;
     stateDestroy = titlestateDestroy;
 
     stateCreate();
@@ -260,7 +261,21 @@ int main(int argc, char** argv) {
             }
         }
 
-        updateConductor();
+        {
+            uint32_t step = getStepInt();
+            uint32_t beat = getBeatInt();
+
+            if (step != lastStep) {
+                lastStep = step;
+                stateStepHit(step);
+            }
+
+            if (beat != lastBeat) {
+                lastBeat = beat;
+                stateBeatHit(beat);
+            }
+        }
+
         stateUpdate();
     }
 

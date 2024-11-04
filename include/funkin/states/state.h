@@ -15,11 +15,13 @@
 #define state_free_sounds() \
     free(sounds);
 
-#define state_switch_state(create, event, update, destroy) \
+#define state_switch_state(create, event, update, stepHit, beatHit, destroy) \
     stateDestroy(); \
     stateCreate = create; \
     stateEvent = event; \
     stateUpdate = update; \
+    stateStepHit = stepHit; \
+    stateBeatHit = beatHit; \
     stateDestroy = destroy; \
     stateCreate();
 

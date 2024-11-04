@@ -54,6 +54,14 @@ void titlestateUpdate() {
 
 }
 
+void titlestateStepHit(uint32_t step) {
+
+}
+
+void titlestateBeatHit(uint32_t beat) {
+
+}
+
 void titlestateDestroy() {
     vkDeviceWaitIdle(device);
 

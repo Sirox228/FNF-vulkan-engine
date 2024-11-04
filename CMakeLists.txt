@@ -27,7 +27,7 @@ set(SOURCES
 
     #frontend
     ${CMAKE_CURRENT_LIST_DIR}/src/funkin/states/titlestate.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/funkin/timing/conductor.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/funkin/conductor.c
     
     #vulkan stuff
     ${CMAKE_CURRENT_LIST_DIR}/src/vk/vkFunctions.c

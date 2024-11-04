@@ -21,20 +21,17 @@ extern uint32_t globalSpriteCount;
 extern void (*stateCreate)();
 extern void (*stateEvent)(SDL_Event* event);
 extern void (*stateUpdate)();
+extern void (*stateStepHit)(uint32_t step);
+extern void (*stateBeatHit)(uint32_t beat);
 extern void (*stateDestroy)();
 
 // conductor data
-// time since last conductor reset
-extern float conductorTime;
-// bpm
+//
 extern float bpm;
-// song positions
-extern float songPosition;
-extern float currentBeat;
-extern float currentStep;
-// duration
-extern float beatLengthMs;
-extern float stepLengthMs;
+extern float beatCrochet;
+extern float stepCrochet;
+extern uint32_t lastStep;
+extern uint32_t lastBeat;
 
 // sdl window handle
 //
